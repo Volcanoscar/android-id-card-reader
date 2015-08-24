@@ -19,5 +19,4 @@ public class ChooseActivity extends BaseActivity {
     protected void init() {
         startFragment(ChooseFragment.getInstance());
     }
-
 }

@@ -15,7 +15,7 @@ public abstract class BaseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-        final View view = inflater.inflate(layoutResourceId(), container);
+        final View view = inflater.inflate(layoutResourceId(), container, false);
         ButterKnife.bind(this, view);
         return view;
     }
@@ -25,6 +25,7 @@ public abstract class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupComponents();
         setupViews();
+        init();
     }
 
     @Override
@@ -39,5 +40,7 @@ public abstract class BaseFragment extends Fragment {
     protected abstract void setupComponents();
 
     protected abstract void setupViews();
+
+    protected abstract void init();
 
 }
