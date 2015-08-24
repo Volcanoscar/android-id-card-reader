@@ -1,3 +1,6 @@
+_Store
+/build
+
 # Built application files
 *.apk
 *.ap_
@@ -15,7 +18,6 @@ gen/
 # Gradle files
 .gradle/
 build/
-/*/build/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -25,3 +27,29 @@ proguard/
 
 # Log Files
 *.log
+
+.classpath
+.project
+.settings
+eclipsebin
+
+bin
+gen
+build
+out
+lib
+
+target
+pom.xml.*
+release.properties
+
+.idea
+*.iml
+*.ipr
+*.iws
+classes
+
+obj
+
+.DS_Store
+
