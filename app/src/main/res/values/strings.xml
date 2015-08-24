@@ -4,4 +4,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="choose_country">Choose a country</string>
+    <string name="passport">Passport</string>
+    <string name="id_card_front">Id Front</string>
+    <string name="id_card_back">Id Back</string>
+    
 </resources>

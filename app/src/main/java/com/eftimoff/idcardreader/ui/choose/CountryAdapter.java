@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -45,7 +46,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
         this.countryList = countryList;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @Bind(R.id.card_view)
         CardView cardView;
@@ -53,10 +54,36 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
         ImageView flag;
         @Bind(R.id.name)
         TextView name;
+        @Bind(R.id.buttonsContainer)
+        LinearLayout buttonsContainer;
+        @Bind(R.id.passport)
+        TextView passport;
+        @Bind(R.id.id_card_back)
+        TextView idCardBack;
+        @Bind(R.id.id_card_front)
+        TextView idCardFront;
 
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+            view.setOnClickListener(this);
+            passport.setOnClickListener(this);
+            idCardBack.setOnClickListener(this);
+            idCardFront.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(final View v) {
+            if (v.getId() == passport.getId()) {
+                return;
+            }
+            if (v.getId() == idCardBack.getId()) {
+                return;
+            }
+            if (v.getId() == idCardFront.getId()) {
+                return;
+            }
+            buttonsContainer.setVisibility(buttonsContainer.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
         }
     }
 }
