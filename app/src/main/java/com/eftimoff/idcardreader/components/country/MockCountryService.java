@@ -14,6 +14,7 @@ public class MockCountryService implements CountryService {
     public MockCountryService() {
         countries.add(Country.newCountry().name("Bulgaria").flagImage("http://www.mapsofworld.com/images/world-countries-flags/bulgeria-flag.gif").build());
         countries.add(Country.newCountry().name("Senegal").flagImage("https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Flag_of_Senegal.svg/1280px-Flag_of_Senegal.svg.png").build());
+        countries.add(Country.newCountry().name("Mali").flagImage("http://www.crwflags.com/fotw/images/m/ml.gif").build());
     }
 
     @Override

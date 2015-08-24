@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="purple">#e40375</color>
+    <color name="purple_dark">#890246</color>
+    <color name="gray">#f4f5f6</color>
+    <color name="gray_medium">#efeff1</color>
+    <color name="gray_light">#EFF2F4</color>
+    <color name="gray_medium_darker">#D3D3D9</color>
+    <color name="gray_dark">#9EA0A1</color>
+    <color name="gray_super_dark_light">#4D525A</color>
+    <color name="gray_super_dark">#53585F</color>
+    <color name="dark_gray">#c0c0c9</color>
+    <color name="dark_gray_darker">#9EA0A1</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#FFFFFFFF</color>
+    <color name="green">#09D59A</color>
+    <color name="green_dark">#059167</color>
+    <color name="semi_transperant">#33000000</color>
+    <color name="red">#E74C42</color>
+    <color name="red_light">#e29793</color>
+    <color name="red_dark">#b73f38</color>
+    <color name="blue">#51A7F9</color>
+    <color name="blue_light">#b5d4f2</color>
+    <color name="blue_dark">#3a80c1</color>
+    <color name="yellow">#F0C32F</color>
+    <color name="yellow_light">#efd683</color>
+    <color name="yellow_dark">#cea729</color>
+    <color name="green_spicy">#29BB9B</color>
+    <color name="green_spicy_light">#b5e0d6</color>
+    <color name="green_spicy_dark">#1d846c</color>
+
+</resources>

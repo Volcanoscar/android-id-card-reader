@@ -1,7 +1,8 @@
 package com.eftimoff.idcardreader.ui.choose;
 
 import android.support.v4.app.Fragment;
-import android.widget.Toast;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.eftimoff.idcardreader.R;
 import com.eftimoff.idcardreader.components.country.CountryService;
@@ -11,6 +12,8 @@ import com.eftimoff.idcardreader.ui.common.BaseFragment;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.BindInt;
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -25,11 +28,22 @@ public class ChooseFragment extends BaseFragment {
     ///            VIEWS            ///
     ///////////////////////////////////
 
+    @Bind(R.id.recycler_view)
+    RecyclerView recyclerView;
+
     ///////////////////////////////////
     ///            FIELDS           ///
     ///////////////////////////////////
 
     private CountryService countryService;
+    private CountryAdapter countryAdapter;
+
+    ///////////////////////////////////
+    ///          RESOURCES          ///
+    ///////////////////////////////////
+
+    @BindInt(R.integer.fragment_choose_column_number)
+    int columnCount;
 
     public static Fragment getInstance() {
         return new ChooseFragment();
@@ -47,7 +61,10 @@ public class ChooseFragment extends BaseFragment {
 
     @Override
     protected void setupViews() {
-
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columnCount));
+        countryAdapter = new CountryAdapter();
+        recyclerView.setAdapter(countryAdapter);
     }
 
     @Override
@@ -56,7 +73,7 @@ public class ChooseFragment extends BaseFragment {
         observableCountries.subscribe(new Action1<List<Country>>() {
             @Override
             public void call(final List<Country> countries) {
-                Toast.makeText(getActivity(), "Size : " + countries.size(), Toast.LENGTH_SHORT).show();
+                countryAdapter.setCountryList(countries);
             }
         });
     }
