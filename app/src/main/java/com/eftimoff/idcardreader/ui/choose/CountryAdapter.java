@@ -12,8 +12,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.eftimoff.idcardreader.R;
 import com.eftimoff.idcardreader.models.Country;
+import com.eftimoff.idcardreader.models.PassportEnum;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import butterknife.Bind;
@@ -22,7 +24,7 @@ import butterknife.ButterKnife;
 public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHolder> {
 
     private List<Country> countryList = new ArrayList<Country>();
-
+    private CountryChosenListener listener;
 
     @Override
     public CountryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -35,6 +37,21 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
         final Country country = countryList.get(position);
         holder.name.setText(country.getName());
         Glide.with(holder.flag.getContext()).load(country.getFlagImage()).fitCenter().centerCrop().into(holder.flag);
+        changeButtonsVisibility(holder, country.getPassportEnums());
+    }
+
+    private void changeButtonsVisibility(final ViewHolder holder, final EnumSet<PassportEnum> passportEnums) {
+        if (!passportEnums.contains(PassportEnum.PASSPORT)) {
+            holder.passport.setVisibility(View.GONE);
+        }
+
+        if (!passportEnums.contains(PassportEnum.ID_CARD_BACK)) {
+            holder.idCardBack.setVisibility(View.GONE);
+        }
+
+        if (!passportEnums.contains(PassportEnum.ID_CARD_FRONT)) {
+            holder.idCardFront.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -46,7 +63,11 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
         this.countryList = countryList;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public void setListener(final CountryChosenListener listener) {
+        this.listener = listener;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @Bind(R.id.card_view)
         CardView cardView;
@@ -75,15 +96,29 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
         @Override
         public void onClick(final View v) {
             if (v.getId() == passport.getId()) {
+                final int position = getAdapterPosition();
+                getInformationAndSend(position, PassportEnum.PASSPORT);
                 return;
             }
             if (v.getId() == idCardBack.getId()) {
+                final int position = getAdapterPosition();
+                getInformationAndSend(position, PassportEnum.ID_CARD_BACK);
                 return;
             }
             if (v.getId() == idCardFront.getId()) {
+                final int position = getAdapterPosition();
+                getInformationAndSend(position, PassportEnum.ID_CARD_FRONT);
                 return;
             }
             buttonsContainer.setVisibility(buttonsContainer.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        }
+    }
+
+    private void getInformationAndSend(final int position, final PassportEnum passportEnum) {
+        if (listener != null) {
+            final Country country = countryList.get(position);
+            country.setChosenPassportEnum(passportEnum);
+            listener.onChoose(country);
         }
     }
 }

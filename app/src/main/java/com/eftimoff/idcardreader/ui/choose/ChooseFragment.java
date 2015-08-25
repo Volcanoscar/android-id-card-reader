@@ -3,6 +3,7 @@ package com.eftimoff.idcardreader.ui.choose;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.eftimoff.idcardreader.R;
 import com.eftimoff.idcardreader.components.country.CountryService;
@@ -18,7 +19,6 @@ import rx.Observable;
 import rx.functions.Action1;
 
 public class ChooseFragment extends BaseFragment {
-
 
     ///////////////////////////////////
     ///          CONSTANTS          ///
@@ -64,6 +64,7 @@ public class ChooseFragment extends BaseFragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columnCount));
         countryAdapter = new CountryAdapter();
+        countryAdapter.setListener(countryChosenListener);
         recyclerView.setAdapter(countryAdapter);
     }
 
@@ -77,4 +78,11 @@ public class ChooseFragment extends BaseFragment {
             }
         });
     }
+
+    private final CountryChosenListener countryChosenListener = new CountryChosenListener() {
+        @Override
+        public void onChoose(final Country country) {
+            Toast.makeText(getActivity(), country.toString(), Toast.LENGTH_SHORT).show();
+        }
+    };
 }
