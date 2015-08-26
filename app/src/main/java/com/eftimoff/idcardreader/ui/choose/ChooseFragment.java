@@ -1,5 +1,9 @@
 package com.eftimoff.idcardreader.ui.choose;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +14,9 @@ import com.eftimoff.idcardreader.components.country.CountryService;
 import com.eftimoff.idcardreader.components.country.DaggerCountryComponent;
 import com.eftimoff.idcardreader.models.Country;
 import com.eftimoff.idcardreader.ui.common.BaseFragment;
+import com.googlecode.tesseract.android.TessBaseAPI;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.Bind;
@@ -77,6 +83,16 @@ public class ChooseFragment extends BaseFragment {
                 countryAdapter.setCountryList(countries);
             }
         });
+        TessBaseAPI baseApi = new TessBaseAPI();
+        File expectedFile = new File("/mnt/sdcard/tesseract/" + File.separator +
+                "eng" + ".traineddata");
+        if (expectedFile.exists()) {
+            baseApi.init("file:///" + getActivity().getPackageName() + "/", "eng");
+            baseApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SINGLE_LINE);
+            baseApi.setImage(getTextImage("hello", 300, 300));
+            Toast.makeText(getActivity(), baseApi.getUTF8Text(), Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private final CountryChosenListener countryChosenListener = new CountryChosenListener() {
@@ -85,4 +101,20 @@ public class ChooseFragment extends BaseFragment {
             Toast.makeText(getActivity(), country.toString(), Toast.LENGTH_SHORT).show();
         }
     };
+
+    private Bitmap getTextImage(String text, int width, int height) {
+        final Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        final Paint paint = new Paint();
+        final Canvas canvas = new Canvas(bmp);
+
+        canvas.drawColor(Color.WHITE);
+
+        paint.setColor(Color.BLACK);
+        paint.setAntiAlias(true);
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setTextSize(24.0f);
+        canvas.drawText(text, width / 2, height / 2, paint);
+
+        return bmp;
+    }
 }
