@@ -1,4 +1,4 @@
-package com.eftimoff.idcardreader.components.tesseract;
+package com.eftimoff.idcardreader.components.tesseract.listeners;
 
 public interface SdCardDownloadListener {
 
