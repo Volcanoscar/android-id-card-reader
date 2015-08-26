@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +17,6 @@ import com.eftimoff.idcardreader.models.Country;
 import com.eftimoff.idcardreader.ui.common.BaseFragment;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
-import java.io.File;
 import java.util.List;
 
 import butterknife.Bind;
@@ -84,15 +84,11 @@ public class ChooseFragment extends BaseFragment {
             }
         });
         TessBaseAPI baseApi = new TessBaseAPI();
-        File expectedFile = new File("/mnt/sdcard/tesseract/" + File.separator +
-                "eng" + ".traineddata");
-        if (expectedFile.exists()) {
-            baseApi.init("file:///" + getActivity().getPackageName() + "/", "eng");
-            baseApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SINGLE_LINE);
-            baseApi.setImage(getTextImage("hello", 300, 300));
-            Toast.makeText(getActivity(), baseApi.getUTF8Text(), Toast.LENGTH_SHORT).show();
-        }
 
+        baseApi.init(Environment.getExternalStorageDirectory().getAbsolutePath() + "/tesseract/", "eng");
+        baseApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SINGLE_LINE);
+        baseApi.setImage(getTextImage("hello", 300, 300));
+        Toast.makeText(getActivity(), baseApi.getUTF8Text(), Toast.LENGTH_SHORT).show();
     }
 
     private final CountryChosenListener countryChosenListener = new CountryChosenListener() {
