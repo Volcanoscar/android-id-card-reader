@@ -2,12 +2,11 @@ package com.eftimoff.idcardreader.components.tesseract.traineddata.manager.sdcar
 
 import android.os.Environment;
 
+import com.eftimoff.idcardreader.components.tesseract.listeners.GzipFileDownloadListener;
 import com.eftimoff.idcardreader.components.tesseract.traineddata.downloader.TrainedDataDownloader;
 import com.eftimoff.idcardreader.components.tesseract.traineddata.manager.TrainedDataManager;
 
 import java.io.File;
-
-import rx.Observable;
 
 public class SdCardTrainedDataManager implements TrainedDataManager {
 
@@ -33,7 +32,8 @@ public class SdCardTrainedDataManager implements TrainedDataManager {
     }
 
     @Override
-    public Observable<String> downloadFile(final String language) {
-        return trainedDataDownloader.downloadTrainedFile(language);
+    public void downloadFile(final String language, final GzipFileDownloadListener listener) {
+        trainedDataDownloader.downloadTrainedFile(language, listener);
     }
+
 }

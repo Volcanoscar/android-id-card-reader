@@ -1,6 +1,6 @@
 package com.eftimoff.idcardreader.components.tesseract.traineddata.manager;
 
-import rx.Observable;
+import com.eftimoff.idcardreader.components.tesseract.listeners.GzipFileDownloadListener;
 
 public interface TrainedDataManager {
 
@@ -8,5 +8,5 @@ public interface TrainedDataManager {
 
     String getTrainedDataPath();
 
-    Observable<String> downloadFile(final String language);
+    void downloadFile(final String language, final GzipFileDownloadListener listener);
 }

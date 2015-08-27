@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.eftimoff.idcardreader.R;
-import com.eftimoff.idcardreader.models.Country;
+import com.eftimoff.idcardreader.models.Passport;
 import com.eftimoff.idcardreader.models.PassportEnum;
 
 import java.util.ArrayList;
@@ -21,23 +21,23 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHolder> {
+public class PassportAdapter extends RecyclerView.Adapter<PassportAdapter.ViewHolder> {
 
-    private List<Country> countryList = new ArrayList<Country>();
-    private CountryChosenListener listener;
+    private List<Passport> passportList = new ArrayList<Passport>();
+    private PassportChosenListener listener;
 
     @Override
-    public CountryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PassportAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_country, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Country country = countryList.get(position);
-        holder.name.setText(country.getName());
-        Glide.with(holder.flag.getContext()).load(country.getFlagImage()).fitCenter().centerCrop().into(holder.flag);
-        changeButtonsVisibility(holder, country.getPassportEnums());
+        final Passport passport = passportList.get(position);
+        holder.name.setText(passport.getName());
+        Glide.with(holder.flag.getContext()).load(passport.getFlagImage()).fitCenter().centerCrop().into(holder.flag);
+        changeButtonsVisibility(holder, passport.getPassportEnums());
     }
 
     private void changeButtonsVisibility(final ViewHolder holder, final EnumSet<PassportEnum> passportEnums) {
@@ -56,14 +56,14 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return countryList.size();
+        return passportList.size();
     }
 
-    public void setCountryList(final List<Country> countryList) {
-        this.countryList = countryList;
+    public void setPassportList(final List<Passport> passportList) {
+        this.passportList = passportList;
     }
 
-    public void setListener(final CountryChosenListener listener) {
+    public void setListener(final PassportChosenListener listener) {
         this.listener = listener;
     }
 
@@ -116,9 +116,9 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
 
     private void getInformationAndSend(final int position, final PassportEnum passportEnum) {
         if (listener != null) {
-            final Country country = countryList.get(position);
-            country.setChosenPassportEnum(passportEnum);
-            listener.onChoose(country);
+            final Passport passport = passportList.get(position);
+            passport.setChosenPassportEnum(passportEnum);
+            listener.onChoose(passport);
         }
     }
 }

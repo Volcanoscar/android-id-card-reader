@@ -2,21 +2,21 @@ package com.eftimoff.idcardreader.models;
 
 import java.util.EnumSet;
 
-public class Country {
+public class Passport {
 
     private String name;
     private String flagImage;
     private EnumSet<PassportEnum> passportEnums;
     private PassportEnum chosenPassportEnum;
 
-    private Country(Builder builder) {
+    private Passport(Builder builder) {
         this.name = builder.name;
         this.flagImage = builder.flagImage;
         this.passportEnums = builder.passportEnums;
         this.chosenPassportEnum = builder.chosenPassportEnum;
     }
 
-    public static Builder newCountry() {
+    public static Builder newPassport() {
         return new Builder();
     }
 
@@ -43,16 +43,16 @@ public class Country {
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
-        if (!(o instanceof Country)) return false;
+        if (!(o instanceof Passport)) return false;
 
-        final Country country = (Country) o;
+        final Passport passport = (Passport) o;
 
-        if (name != null ? !name.equals(country.name) : country.name != null) return false;
-        if (flagImage != null ? !flagImage.equals(country.flagImage) : country.flagImage != null)
+        if (name != null ? !name.equals(passport.name) : passport.name != null) return false;
+        if (flagImage != null ? !flagImage.equals(passport.flagImage) : passport.flagImage != null)
             return false;
-        if (passportEnums != null ? !passportEnums.equals(country.passportEnums) : country.passportEnums != null)
+        if (passportEnums != null ? !passportEnums.equals(passport.passportEnums) : passport.passportEnums != null)
             return false;
-        return chosenPassportEnum == country.chosenPassportEnum;
+        return chosenPassportEnum == passport.chosenPassportEnum;
 
     }
 
@@ -67,7 +67,7 @@ public class Country {
 
     @Override
     public String toString() {
-        return "Country{" +
+        return "Passport{" +
                 "name='" + name + '\'' +
                 ", flagImage='" + flagImage + '\'' +
                 ", passportEnums=" + passportEnums +
@@ -84,8 +84,8 @@ public class Country {
         private Builder() {
         }
 
-        public Country build() {
-            return new Country(this);
+        public Passport build() {
+            return new Passport(this);
         }
 
         public Builder name(String name) {

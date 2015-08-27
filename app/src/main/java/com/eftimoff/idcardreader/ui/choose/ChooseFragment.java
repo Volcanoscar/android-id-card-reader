@@ -1,21 +1,17 @@
 package com.eftimoff.idcardreader.ui.choose;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.eftimoff.idcardreader.R;
-import com.eftimoff.idcardreader.components.country.CountryService;
-import com.eftimoff.idcardreader.components.country.DaggerCountryComponent;
-import com.eftimoff.idcardreader.models.Country;
+import com.eftimoff.idcardreader.components.passport.PassportService;
+import com.eftimoff.idcardreader.components.passport.DaggerPassportComponent;
+import com.eftimoff.idcardreader.components.tesseract.DaggerTessaractComponent;
+import com.eftimoff.idcardreader.components.tesseract.Tesseract;
+import com.eftimoff.idcardreader.models.Passport;
 import com.eftimoff.idcardreader.ui.common.BaseFragment;
-import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.util.List;
 
@@ -25,6 +21,10 @@ import rx.Observable;
 import rx.functions.Action1;
 
 public class ChooseFragment extends BaseFragment {
+
+    public interface ChooseFragmentDelegate {
+
+    }
 
     ///////////////////////////////////
     ///          CONSTANTS          ///
@@ -41,8 +41,9 @@ public class ChooseFragment extends BaseFragment {
     ///            FIELDS           ///
     ///////////////////////////////////
 
-    private CountryService countryService;
-    private CountryAdapter countryAdapter;
+    private PassportService passportService;
+    private PassportAdapter passportAdapter;
+    private Tesseract tesseract;
 
     ///////////////////////////////////
     ///          RESOURCES          ///
@@ -50,6 +51,7 @@ public class ChooseFragment extends BaseFragment {
 
     @BindInt(R.integer.fragment_choose_column_number)
     int columnCount;
+
 
     public static Fragment getInstance() {
         return new ChooseFragment();
@@ -62,55 +64,34 @@ public class ChooseFragment extends BaseFragment {
 
     @Override
     protected void setupComponents() {
-        countryService = DaggerCountryComponent.create().provideCountryService();
+        passportService = DaggerPassportComponent.create().provideCountryService();
+        tesseract = DaggerTessaractComponent.create().provideTesseract();
     }
 
     @Override
     protected void setupViews() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columnCount));
-        countryAdapter = new CountryAdapter();
-        countryAdapter.setListener(countryChosenListener);
-        recyclerView.setAdapter(countryAdapter);
+        passportAdapter = new PassportAdapter();
+        passportAdapter.setListener(passportChosenListener);
+        recyclerView.setAdapter(passportAdapter);
     }
 
     @Override
     protected void init() {
-        final Observable<List<Country>> observableCountries = countryService.getCountries();
-        observableCountries.subscribe(new Action1<List<Country>>() {
+        final Observable<List<Passport>> observableCountries = passportService.getCountries();
+        observableCountries.subscribe(new Action1<List<Passport>>() {
             @Override
-            public void call(final List<Country> countries) {
-                countryAdapter.setCountryList(countries);
+            public void call(final List<Passport> countries) {
+                passportAdapter.setPassportList(countries);
             }
         });
-        TessBaseAPI baseApi = new TessBaseAPI();
-
-        baseApi.init(Environment.getExternalStorageDirectory().getAbsolutePath() + "/tesseract/", "eng");
-        baseApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SINGLE_LINE);
-        baseApi.setImage(getTextImage("hello", 300, 300));
-        Toast.makeText(getActivity(), baseApi.getUTF8Text(), Toast.LENGTH_SHORT).show();
     }
 
-    private final CountryChosenListener countryChosenListener = new CountryChosenListener() {
+    private final PassportChosenListener passportChosenListener = new PassportChosenListener() {
         @Override
-        public void onChoose(final Country country) {
-            Toast.makeText(getActivity(), country.toString(), Toast.LENGTH_SHORT).show();
+        public void onChoose(final Passport passport) {
+            Toast.makeText(getActivity(), passport.toString(), Toast.LENGTH_SHORT).show();
         }
     };
-
-    private Bitmap getTextImage(String text, int width, int height) {
-        final Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        final Paint paint = new Paint();
-        final Canvas canvas = new Canvas(bmp);
-
-        canvas.drawColor(Color.WHITE);
-
-        paint.setColor(Color.BLACK);
-        paint.setAntiAlias(true);
-        paint.setTextAlign(Paint.Align.CENTER);
-        paint.setTextSize(24.0f);
-        canvas.drawText(text, width / 2, height / 2, paint);
-
-        return bmp;
-    }
 }
