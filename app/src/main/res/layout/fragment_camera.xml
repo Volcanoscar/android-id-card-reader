@@ -5,17 +5,16 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true">
 
-    <!-- <com.eftimoff.idcardreader.ui.common.camera.CameraView
-         android:id="@+id/cameraView"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         android:background="@color/black"/>-->
-
     <com.eftimoff.idcardreader.ui.camera.ShowCameraView
         android:id="@+id/cameraView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"/>
+
+    <com.eftimoff.idcardreader.ui.camera.AreaView
+        android:id="@+id/areaView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <ImageView
         android:id="@+id/flag"
@@ -29,9 +28,11 @@
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/flag"
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
 </RelativeLayout>

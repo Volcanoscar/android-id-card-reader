@@ -1,7 +1,10 @@
 package com.eftimoff.idcardreader.components.tesseract;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
 import android.graphics.Rect;
+import android.graphics.YuvImage;
 
 import com.eftimoff.idcardreader.components.tesseract.listeners.DownloadListener;
 import com.eftimoff.idcardreader.components.tesseract.listeners.GzipFileDownloadListener;
@@ -9,7 +12,10 @@ import com.eftimoff.idcardreader.components.tesseract.logger.TesseractLogger;
 import com.eftimoff.idcardreader.components.tesseract.traineddata.manager.TrainedDataManager;
 import com.eftimoff.idcardreader.components.tesseract.traineddata.models.PlanarYUVLuminanceSource;
 import com.google.common.base.Preconditions;
+import com.googlecode.leptonica.android.Pixa;
 import com.googlecode.tesseract.android.TessBaseAPI;
+
+import java.io.ByteArrayOutputStream;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -32,8 +38,8 @@ public class TesseractImpl implements Tesseract {
         tesseractLogger.log("Constructing Tesseract api.");
 
         tessBaseAPI = new TessBaseAPI();
-        tessBaseAPI.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SINGLE_LINE);
-        tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "АБВГДЕЖЗИЙКЛМНОПРСУФХЦЧШЩЪЮЯабвгдежзийклмнопрстуфхцчшщъюя0123456789");
+        tessBaseAPI.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SINGLE_WORD);
+        tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, ",./<>?;'\\:\"|[]{}-=_+!@#$%^&&*()`~");
     }
 
     @Override
@@ -100,12 +106,12 @@ public class TesseractImpl implements Tesseract {
     }
 
     @Override
-    public Observable<TesseractResult> getFromBitmap(final byte[] array, final Rect rect) {
-
+    public Observable<TesseractResult> getFromBitmap(final byte[] array, final int width, final int height, final Rect rect) {
         return Observable.create(new Observable.OnSubscribe<TesseractResult>() {
             @Override
             public void call(final Subscriber<? super TesseractResult> subscriber) {
-                Bitmap bitmap = buildLuminanceSource(array, rect.width(), rect.height(), rect).renderCroppedGreyscaleBitmap();
+                final Bitmap bitmap = buildLuminanceSource(array, width, height, rect).renderCroppedGreyscaleBitmap();
+//                final Bitmap bitmap = getBitmapFromBytes(array, rect);
                 tesseractLogger.log("Tesseract.getFromBitmap() Getting text from bitmap : " + bitmap.toString());
                 try {
                     final long start = System.currentTimeMillis();
@@ -113,29 +119,49 @@ public class TesseractImpl implements Tesseract {
                     final String utf8Text = tessBaseAPI.getUTF8Text();
                     final long timeRequired = System.currentTimeMillis() - start;
 
+                    final Pixa regions = tessBaseAPI.getRegions();
+                    final Pixa textlines = tessBaseAPI.getTextlines();
+                    final Pixa words = tessBaseAPI.getWords();
+                    final Pixa strips = tessBaseAPI.getStrips();
+
                     final TesseractResult tesseractResult = new TesseractResult();
                     tesseractResult.setText(utf8Text);
                     tesseractResult.setWordConfidences(tessBaseAPI.wordConfidences());
                     tesseractResult.setMeanConfidence(tessBaseAPI.meanConfidence());
-                    tesseractResult.setRegionBoundingBoxes(tessBaseAPI.getRegions().getBoxRects());
-                    tesseractResult.setTextlineBoundingBoxes(tessBaseAPI.getTextlines().getBoxRects());
-                    tesseractResult.setWordBoundingBoxes(tessBaseAPI.getWords().getBoxRects());
-                    tesseractResult.setStripBoundingBoxes(tessBaseAPI.getStrips().getBoxRects());
+                    tesseractResult.setRegionBoundingBoxes(regions.getBoxRects());
+
+                    tesseractResult.setTextlineBoundingBoxes(textlines.getBoxRects());
+                    tesseractResult.setWordBoundingBoxes(words.getBoxRects());
+                    tesseractResult.setStripBoundingBoxes(strips.getBoxRects());
                     tesseractResult.setBitmap(bitmap);
                     tesseractResult.setRecognitionTimeRequired(timeRequired);
 
                     subscriber.onNext(tesseractResult);
                     subscriber.onCompleted();
-                    tesseractLogger.log("Tesseract.getFromBitmap() Getting text from bitmap : " + utf8Text);
+
+                    regions.recycle();
+                    textlines.recycle();
+                    words.recycle();
+                    strips.recycle();
+                    tesseractLogger.log("Tesseract.getFromBitmap() Getting text from bitmap : " + utf8Text + " , time required : " + timeRequired + " ms.");
                 } catch (Exception e) {
                     tesseractLogger.error(e);
                     subscriber.onError(e);
                 }
             }
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public PlanarYUVLuminanceSource buildLuminanceSource(byte[] data, int width, int height, final Rect rect) {
+    public Bitmap getBitmapFromBytes(final byte[] array, final Rect rect) {
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        final YuvImage image = new YuvImage(array, ImageFormat.NV21, rect.width(), rect.height(), null);
+        image.compressToJpeg(rect, 60, byteArrayOutputStream);
+        final BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inMutable = true;
+        return BitmapFactory.decodeByteArray(byteArrayOutputStream.toByteArray(), 0, byteArrayOutputStream.size(), opts);
+    }
+
+    public PlanarYUVLuminanceSource buildLuminanceSource(final byte[] data, final int width, final int height, final Rect rect) {
         if (rect == null) {
             return null;
         }

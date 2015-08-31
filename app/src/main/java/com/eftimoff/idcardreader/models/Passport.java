@@ -10,6 +10,7 @@ public class Passport implements Serializable {
     private String flagImage;
     private EnumSet<PassportEnum> passportEnums;
     private PassportEnum chosenPassportEnum;
+    private Area area;
 
     private Passport(Builder builder) {
         this.name = builder.name;
@@ -17,6 +18,7 @@ public class Passport implements Serializable {
         this.passportEnums = builder.passportEnums;
         this.chosenPassportEnum = builder.chosenPassportEnum;
         this.language = builder.language;
+        this.area = builder.area;
     }
 
     public static Builder newPassport() {
@@ -41,6 +43,10 @@ public class Passport implements Serializable {
 
     public PassportEnum getChosenPassportEnum() {
         return chosenPassportEnum;
+    }
+
+    public Area getArea() {
+        return area;
     }
 
     public void setChosenPassportEnum(final PassportEnum chosenPassportEnum) {
@@ -88,6 +94,7 @@ public class Passport implements Serializable {
         private EnumSet<PassportEnum> passportEnums;
         private PassportEnum chosenPassportEnum;
         private String language;
+        private Area area;
 
         private Builder() {
         }
@@ -118,6 +125,11 @@ public class Passport implements Serializable {
 
         public Builder language(String language) {
             this.language = language;
+            return this;
+        }
+
+        public Builder area(Area area) {
+            this.area = area;
             return this;
         }
     }

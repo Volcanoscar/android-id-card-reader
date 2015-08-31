@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.eftimoff.idcardreader.R;
 import com.eftimoff.idcardreader.components.passport.DaggerPassportComponent;
+import com.eftimoff.idcardreader.components.passport.PassportModule;
 import com.eftimoff.idcardreader.components.passport.PassportService;
 import com.eftimoff.idcardreader.models.Passport;
 import com.eftimoff.idcardreader.ui.common.BaseFragment;
@@ -73,7 +74,7 @@ public class ChooseFragment extends BaseFragment {
 
     @Override
     protected void setupComponents() {
-        passportService = DaggerPassportComponent.create().provideCountryService();
+        passportService = DaggerPassportComponent.builder().passportModule(new PassportModule(getActivity())).build().provideCountryService();
     }
 
     @Override

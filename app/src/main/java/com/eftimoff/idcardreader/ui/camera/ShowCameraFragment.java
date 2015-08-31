@@ -1,10 +1,6 @@
 package com.eftimoff.idcardreader.ui.camera;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
 import android.graphics.Rect;
-import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.view.View;
@@ -15,13 +11,12 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.eftimoff.idcardreader.R;
 import com.eftimoff.idcardreader.components.tesseract.DaggerTessaractComponent;
+import com.eftimoff.idcardreader.components.tesseract.TessaractModule;
 import com.eftimoff.idcardreader.components.tesseract.Tesseract;
 import com.eftimoff.idcardreader.components.tesseract.TesseractResult;
 import com.eftimoff.idcardreader.components.tesseract.listeners.DownloadListener;
 import com.eftimoff.idcardreader.models.Passport;
 import com.eftimoff.idcardreader.ui.common.BaseFragment;
-
-import java.io.ByteArrayOutputStream;
 
 import butterknife.Bind;
 import rx.Observable;
@@ -46,6 +41,8 @@ public class ShowCameraFragment extends BaseFragment {
     ShowCameraView cameraView;
     @Bind(R.id.progressBar)
     ProgressBar progressBar;
+    @Bind(R.id.areaView)
+    AreaView areaView;
 
     ///////////////////////////////////
     ///            FIELDS           ///
@@ -53,7 +50,6 @@ public class ShowCameraFragment extends BaseFragment {
 
     private Tesseract tesseract;
     private ShowCameraSettings cameraSettings;
-    private boolean isTesseractWorking;
 
     public static ShowCameraFragment getInstance(final ShowCameraSettings cameraSettings) {
         final ShowCameraFragment showCameraFragment = new ShowCameraFragment();
@@ -85,14 +81,14 @@ public class ShowCameraFragment extends BaseFragment {
 
     @Override
     protected void setupComponents() {
-        tesseract = DaggerTessaractComponent.builder().build().provideTesseract();
+        tesseract = DaggerTessaractComponent.builder().tessaractModule(new TessaractModule()).build().provideTesseract();
     }
 
     @Override
     protected void setupViews() {
         final Passport passport = cameraSettings.getPassport();
         Glide.with(getActivity()).load(passport.getFlagImage()).into(flag);
-
+        areaView.setArea(passport.getArea());
     }
 
     @Override
@@ -103,15 +99,8 @@ public class ShowCameraFragment extends BaseFragment {
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         cameraView.stop();
-    }
-
-    public Bitmap getBitmapFromBytes(final byte[] array, final Camera.Size size) {
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        final YuvImage image = new YuvImage(array, ImageFormat.NV21, size.width, size.height, null);
-        image.compressToJpeg(new Rect(0, 0, size.width, size.height), 100, byteArrayOutputStream);
-        return BitmapFactory.decodeByteArray(byteArrayOutputStream.toByteArray(), 0, byteArrayOutputStream.size());
+        super.onDestroyView();
     }
 
     private final ShowCameraView.CAMViewListener camViewListener = new ShowCameraView.CAMViewListener() {
@@ -139,29 +128,26 @@ public class ShowCameraFragment extends BaseFragment {
 
         @Override
         public boolean onPreviewData(final byte[] bytes, final int i, final Camera.Size size) {
-            final Bitmap bitmap = getBitmapFromBytes(bytes, size);
-            if (bitmap != null) {
-                final Observable<TesseractResult> fromBitmapObservable = tesseract.getFromBitmap(bytes, new Rect(0, 0, size.width, size.height));
-                fromBitmapObservable.subscribe(new Observer<TesseractResult>() {
-                    @Override
-                    public void onCompleted() {
+            showLoadingDialog();
+            final Observable<TesseractResult> fromBitmapObservable = tesseract.getFromBitmap(bytes, size.width, size.height, new Rect(0, 0, size.width, size.height));
+            fromBitmapObservable.subscribe(new Observer<TesseractResult>() {
+                @Override
+                public void onCompleted() {
+                }
 
-                    }
+                @Override
+                public void onError(final Throwable e) {
+                }
 
-                    @Override
-                    public void onError(final Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(final TesseractResult tesseractResult) {
-                        cameraView.enablePreviewGrabbing();
-                        Toast.makeText(getActivity(), tesseractResult.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-                cameraView.disablePreviewGrabbing();
-            }
-            return false;
+                @Override
+                public void onNext(final TesseractResult tesseractResult) {
+                    hideLoadingDialog();
+                    cameraView.enablePreviewGrabbing();
+//                    Toast.makeText(getActivity(), tesseractResult.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            cameraView.disablePreviewGrabbing();
+            return true;
         }
     };
 
@@ -177,11 +163,12 @@ public class ShowCameraFragment extends BaseFragment {
     private final DownloadListener downloadListener = new DownloadListener() {
         @Override
         public void onStart() {
-
+            showLoadingDialog();
         }
 
         @Override
         public void onDone() {
+            hideLoadingDialog();
             cameraView.start();
             cameraView.setCamViewListener(camViewListener);
         }

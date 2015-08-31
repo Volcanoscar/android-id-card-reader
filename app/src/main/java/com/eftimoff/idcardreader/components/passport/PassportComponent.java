@@ -1,5 +1,7 @@
 package com.eftimoff.idcardreader.components.passport;
 
+import android.app.Activity;
+
 import javax.inject.Singleton;
 
 import dagger.Component;

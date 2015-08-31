@@ -10,5 +10,5 @@ public interface Tesseract {
 
     void init(final String language, final DownloadListener downloadListener);
 
-    Observable<TesseractResult> getFromBitmap(final byte[] array, final Rect rect);
+    Observable<TesseractResult> getFromBitmap(final byte[] array, final int width, final int height, final Rect rect);
 }
