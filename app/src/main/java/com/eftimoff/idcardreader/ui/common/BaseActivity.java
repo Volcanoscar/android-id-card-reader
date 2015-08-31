@@ -3,7 +3,6 @@ package com.eftimoff.idcardreader.ui.common;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
@@ -36,7 +35,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected abstract void init();
 
-    protected void startFragment(final Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(containerId(), fragment).commit();
+    protected void startFragment(final BaseFragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(containerId(), fragment, fragment.getTAG()).commit();
     }
 }

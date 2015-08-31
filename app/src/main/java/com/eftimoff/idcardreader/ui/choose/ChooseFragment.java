@@ -1,18 +1,16 @@
 package com.eftimoff.idcardreader.ui.choose;
 
-import android.support.v4.app.Fragment;
+import android.app.Activity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
 import com.eftimoff.idcardreader.R;
-import com.eftimoff.idcardreader.components.passport.PassportService;
 import com.eftimoff.idcardreader.components.passport.DaggerPassportComponent;
-import com.eftimoff.idcardreader.components.tesseract.DaggerTessaractComponent;
-import com.eftimoff.idcardreader.components.tesseract.Tesseract;
+import com.eftimoff.idcardreader.components.passport.PassportService;
 import com.eftimoff.idcardreader.models.Passport;
 import com.eftimoff.idcardreader.ui.common.BaseFragment;
 
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.Bind;
@@ -22,8 +20,8 @@ import rx.functions.Action1;
 
 public class ChooseFragment extends BaseFragment {
 
-    public interface ChooseFragmentDelegate {
-
+    public interface ChooseFragmentDelegate extends Serializable {
+        void onChoose(final Passport passport);
     }
 
     ///////////////////////////////////
@@ -43,7 +41,7 @@ public class ChooseFragment extends BaseFragment {
 
     private PassportService passportService;
     private PassportAdapter passportAdapter;
-    private Tesseract tesseract;
+    private ChooseFragmentDelegate delegate;
 
     ///////////////////////////////////
     ///          RESOURCES          ///
@@ -53,8 +51,19 @@ public class ChooseFragment extends BaseFragment {
     int columnCount;
 
 
-    public static Fragment getInstance() {
+    public static ChooseFragment getInstance() {
         return new ChooseFragment();
+    }
+
+    @Override
+    public void onAttach(final Activity activity) {
+        super.onAttach(activity);
+        try {
+            delegate = (ChooseFragmentDelegate) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement ChooseFragmentDelegate");
+        }
     }
 
     @Override
@@ -65,7 +74,6 @@ public class ChooseFragment extends BaseFragment {
     @Override
     protected void setupComponents() {
         passportService = DaggerPassportComponent.create().provideCountryService();
-        tesseract = DaggerTessaractComponent.create().provideTesseract();
     }
 
     @Override
@@ -91,7 +99,7 @@ public class ChooseFragment extends BaseFragment {
     private final PassportChosenListener passportChosenListener = new PassportChosenListener() {
         @Override
         public void onChoose(final Passport passport) {
-            Toast.makeText(getActivity(), passport.toString(), Toast.LENGTH_SHORT).show();
+            delegate.onChoose(passport);
         }
     };
 }

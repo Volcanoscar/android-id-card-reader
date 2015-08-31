@@ -1,12 +1,14 @@
 package com.eftimoff.idcardreader.components.tesseract;
 
-import android.graphics.Bitmap;
+import android.graphics.Rect;
 
 import com.eftimoff.idcardreader.components.tesseract.listeners.DownloadListener;
+
+import rx.Observable;
 
 public interface Tesseract {
 
     void init(final String language, final DownloadListener downloadListener);
 
-    String getFromBitmap(final Bitmap bitmap);
+    Observable<TesseractResult> getFromBitmap(final byte[] array, final Rect rect);
 }

@@ -12,6 +12,12 @@ import butterknife.ButterKnife;
 
 public abstract class BaseFragment extends Fragment {
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
@@ -34,6 +40,10 @@ public abstract class BaseFragment extends Fragment {
         ButterKnife.unbind(this);
     }
 
+    public String getTAG() {
+        return this.getClass().getSimpleName();
+    }
+
     @LayoutRes
     protected abstract int layoutResourceId();
 
@@ -42,5 +52,6 @@ public abstract class BaseFragment extends Fragment {
     protected abstract void setupViews();
 
     protected abstract void init();
+
 
 }

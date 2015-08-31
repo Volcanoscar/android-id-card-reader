@@ -1,10 +1,12 @@
 package com.eftimoff.idcardreader.models;
 
+import java.io.Serializable;
 import java.util.EnumSet;
 
-public class Passport {
+public class Passport implements Serializable {
 
     private String name;
+    private String language;
     private String flagImage;
     private EnumSet<PassportEnum> passportEnums;
     private PassportEnum chosenPassportEnum;
@@ -14,6 +16,7 @@ public class Passport {
         this.flagImage = builder.flagImage;
         this.passportEnums = builder.passportEnums;
         this.chosenPassportEnum = builder.chosenPassportEnum;
+        this.language = builder.language;
     }
 
     public static Builder newPassport() {
@@ -22,6 +25,10 @@ public class Passport {
 
     public String getName() {
         return name;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 
     public String getFlagImage() {
@@ -80,6 +87,7 @@ public class Passport {
         private String flagImage;
         private EnumSet<PassportEnum> passportEnums;
         private PassportEnum chosenPassportEnum;
+        private String language;
 
         private Builder() {
         }
@@ -105,6 +113,11 @@ public class Passport {
 
         public Builder chosenPassportEnum(PassportEnum chosenPassportEnum) {
             this.chosenPassportEnum = chosenPassportEnum;
+            return this;
+        }
+
+        public Builder language(String language) {
+            this.language = language;
             return this;
         }
     }
