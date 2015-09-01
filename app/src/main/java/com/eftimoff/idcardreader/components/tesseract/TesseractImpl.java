@@ -1,21 +1,18 @@
 package com.eftimoff.idcardreader.components.tesseract;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
 import android.graphics.Rect;
-import android.graphics.YuvImage;
 
+import com.eftimoff.idcardreader.components.models.TesseractResult;
+import com.eftimoff.idcardreader.components.tesseract.images.TesseractBitmapConverter;
 import com.eftimoff.idcardreader.components.tesseract.listeners.DownloadListener;
 import com.eftimoff.idcardreader.components.tesseract.listeners.GzipFileDownloadListener;
 import com.eftimoff.idcardreader.components.tesseract.logger.TesseractLogger;
+import com.eftimoff.idcardreader.components.tesseract.text.TesseractTextCleaner;
 import com.eftimoff.idcardreader.components.tesseract.traineddata.manager.TrainedDataManager;
-import com.eftimoff.idcardreader.components.tesseract.traineddata.models.PlanarYUVLuminanceSource;
 import com.google.common.base.Preconditions;
 import com.googlecode.leptonica.android.Pixa;
 import com.googlecode.tesseract.android.TessBaseAPI;
-
-import java.io.ByteArrayOutputStream;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -30,16 +27,20 @@ public class TesseractImpl implements Tesseract {
     private final TessBaseAPI tessBaseAPI;
     private final TrainedDataManager trainedDataManager;
     private final TesseractLogger tesseractLogger;
+    private final TesseractBitmapConverter tesseractBitmapConverter;
+    private final TesseractTextCleaner tesseractTextCleaner;
 
-    public TesseractImpl(final TrainedDataManager trainedDataManager, final TesseractLogger tesseractLogger) {
+    public TesseractImpl(final TrainedDataManager trainedDataManager, final TesseractLogger tesseractLogger, final TesseractBitmapConverter tesseractBitmapConverter, final TesseractTextCleaner tesseractTextCleaner) {
         this.trainedDataManager = trainedDataManager;
         this.tesseractLogger = tesseractLogger;
+        this.tesseractBitmapConverter = tesseractBitmapConverter;
+        this.tesseractTextCleaner = tesseractTextCleaner;
 
         tesseractLogger.log("Constructing Tesseract api.");
 
         tessBaseAPI = new TessBaseAPI();
-        tessBaseAPI.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SINGLE_WORD);
-        tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, ",./<>?;'\\:\"|[]{}-=_+!@#$%^&&*()`~");
+        tessBaseAPI.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SPARSE_TEXT);
+        tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "°");
     }
 
     @Override
@@ -110,13 +111,15 @@ public class TesseractImpl implements Tesseract {
         return Observable.create(new Observable.OnSubscribe<TesseractResult>() {
             @Override
             public void call(final Subscriber<? super TesseractResult> subscriber) {
-                final Bitmap bitmap = buildLuminanceSource(array, width, height, rect).renderCroppedGreyscaleBitmap();
-//                final Bitmap bitmap = getBitmapFromBytes(array, rect);
-                tesseractLogger.log("Tesseract.getFromBitmap() Getting text from bitmap : " + bitmap.toString());
+
+                tesseractLogger.log("Tesseract.getFromBitmap() Getting text from bitmap ");
                 try {
+                    final Bitmap bitmap = tesseractBitmapConverter.convertToBitmap(array, width, height, rect);
+
                     final long start = System.currentTimeMillis();
                     tessBaseAPI.setImage(bitmap);
                     final String utf8Text = tessBaseAPI.getUTF8Text();
+                    final String cleanText = tesseractTextCleaner.cleanText(utf8Text);
                     final long timeRequired = System.currentTimeMillis() - start;
 
                     final Pixa regions = tessBaseAPI.getRegions();
@@ -125,7 +128,7 @@ public class TesseractImpl implements Tesseract {
                     final Pixa strips = tessBaseAPI.getStrips();
 
                     final TesseractResult tesseractResult = new TesseractResult();
-                    tesseractResult.setText(utf8Text);
+                    tesseractResult.setText(cleanText);
                     tesseractResult.setWordConfidences(tessBaseAPI.wordConfidences());
                     tesseractResult.setMeanConfidence(tessBaseAPI.meanConfidence());
                     tesseractResult.setRegionBoundingBoxes(regions.getBoxRects());
@@ -150,22 +153,5 @@ public class TesseractImpl implements Tesseract {
                 }
             }
         }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread());
-    }
-
-    public Bitmap getBitmapFromBytes(final byte[] array, final Rect rect) {
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        final YuvImage image = new YuvImage(array, ImageFormat.NV21, rect.width(), rect.height(), null);
-        image.compressToJpeg(rect, 60, byteArrayOutputStream);
-        final BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inMutable = true;
-        return BitmapFactory.decodeByteArray(byteArrayOutputStream.toByteArray(), 0, byteArrayOutputStream.size(), opts);
-    }
-
-    public PlanarYUVLuminanceSource buildLuminanceSource(final byte[] data, final int width, final int height, final Rect rect) {
-        if (rect == null) {
-            return null;
-        }
-        // Go ahead and assume it's YUV rather than die.
-        return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top, rect.width(), rect.height(), false);
     }
 }

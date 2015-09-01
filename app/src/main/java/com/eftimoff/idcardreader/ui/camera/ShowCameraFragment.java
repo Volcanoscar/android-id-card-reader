@@ -10,11 +10,12 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.eftimoff.idcardreader.R;
+import com.eftimoff.idcardreader.components.models.TesseractResult;
 import com.eftimoff.idcardreader.components.tesseract.DaggerTessaractComponent;
 import com.eftimoff.idcardreader.components.tesseract.TessaractModule;
 import com.eftimoff.idcardreader.components.tesseract.Tesseract;
-import com.eftimoff.idcardreader.components.tesseract.TesseractResult;
 import com.eftimoff.idcardreader.components.tesseract.listeners.DownloadListener;
+import com.eftimoff.idcardreader.models.AreaRect;
 import com.eftimoff.idcardreader.models.Passport;
 import com.eftimoff.idcardreader.ui.common.BaseFragment;
 
@@ -129,7 +130,9 @@ public class ShowCameraFragment extends BaseFragment {
         @Override
         public boolean onPreviewData(final byte[] bytes, final int i, final Camera.Size size) {
             showLoadingDialog();
-            final Observable<TesseractResult> fromBitmapObservable = tesseract.getFromBitmap(bytes, size.width, size.height, new Rect(0, 0, size.width, size.height));
+            final AreaRect areaRect = areaView.incrementPosition();
+            final Rect rect = createRect(size, areaRect);
+            final Observable<TesseractResult> fromBitmapObservable = tesseract.getFromBitmap(bytes, size.width, size.height, rect);
             fromBitmapObservable.subscribe(new Observer<TesseractResult>() {
                 @Override
                 public void onCompleted() {
@@ -137,19 +140,45 @@ public class ShowCameraFragment extends BaseFragment {
 
                 @Override
                 public void onError(final Throwable e) {
+                    Toast.makeText(getActivity(), "Error : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    cameraView.enablePreviewGrabbing();
                 }
 
                 @Override
                 public void onNext(final TesseractResult tesseractResult) {
                     hideLoadingDialog();
-                    cameraView.enablePreviewGrabbing();
-//                    Toast.makeText(getActivity(), tesseractResult.toString(), Toast.LENGTH_SHORT).show();
+                    if (tesseractResult.getMeanConfidence() > 85) {
+                        Toast.makeText(getActivity(), tesseractResult.getText(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        cameraView.enablePreviewGrabbing();
+                    }
                 }
             });
             cameraView.disablePreviewGrabbing();
             return true;
         }
     };
+
+    /**
+     * Create rect from the preview frame.
+     * All the AreaRect methods are percentage so it is not a problem.
+     * First construct the id card on the preview frame.
+     * Then we construct this AreaRect and return the result
+     * as Rect to be used for the Tesseract.
+     */
+    private Rect createRect(final Camera.Size size, final AreaRect areaRect) {
+        final int offsetWidth = (int) (size.width * 0.2);
+        final int idCardWidth = (int) (size.width * 0.6);
+        final int idCardHeight = (int) (idCardWidth / 1.58);
+        final int topIdCardHeight = idCardWidth / 2 - idCardHeight / 2;
+        final int bottomIdCardHeight = idCardWidth / 2 + idCardHeight / 2;
+        final Rect parentRect = new Rect(offsetWidth, topIdCardHeight, size.width - offsetWidth, bottomIdCardHeight);
+        final int left = parentRect.left + areaRect.getPercentageFromParentLeft() * parentRect.width() / 100;
+        final int top = parentRect.top + areaRect.getPercentageFromParentTop() * parentRect.height() / 100;
+        final int right = left + areaRect.getPercentageWidth() * parentRect.width() / 100;
+        final int bottom = top + areaRect.getPercentageHeight() * parentRect.height() / 100;
+        return new Rect(left, top, right, bottom);
+    }
 
 
     private void showLoadingDialog() {

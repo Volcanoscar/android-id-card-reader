@@ -44,7 +44,6 @@ public class AreaHelper {
             final int bottomIdCardHeight = idCardWidth / 2 + idCardHeight / 2;
             return new Rect(offsetWidth, topIdCardHeight, width - offsetWidth, bottomIdCardHeight);
         }
-
     }
 
     public int getStatusBarHeight() {

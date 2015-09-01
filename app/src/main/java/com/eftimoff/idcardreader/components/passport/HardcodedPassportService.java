@@ -2,10 +2,12 @@ package com.eftimoff.idcardreader.components.passport;
 
 import com.eftimoff.idcardreader.components.passport.area.AreaHelper;
 import com.eftimoff.idcardreader.models.Area;
+import com.eftimoff.idcardreader.models.AreaRect;
 import com.eftimoff.idcardreader.models.Passport;
 import com.eftimoff.idcardreader.models.PassportEnum;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -35,8 +37,17 @@ public class HardcodedPassportService implements PassportService {
     }
 
     private Passport createBulgarianPassport() {
+        final AreaRect number = AreaRect.newAreaRect()
+                .percentageFromParentLeft(15)
+                .percentageFromParentTop(24)
+                .percentageWidth(20)
+                .percentageHeight(7)
+                .name("Id Number")
+                .build();
+
         final Area area = Area.newArea()
                 .areaRect(areaHelper.getDefaultIdCardSize())
+                .rects(Collections.singletonList(number))
                 .build();
 
         return Passport.newPassport()

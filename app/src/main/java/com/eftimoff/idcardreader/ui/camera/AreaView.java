@@ -2,7 +2,6 @@ package com.eftimoff.idcardreader.ui.camera;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,11 +11,15 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.eftimoff.idcardreader.models.Area;
+import com.eftimoff.idcardreader.models.AreaRect;
 
 public class AreaView extends View {
 
     private Area area;
     private Paint areaPaint;
+    private Paint innerPaint;
+    private Paint textPaint;
+    private int currentInnerPosition = -1;
 
     public AreaView(final Context context) {
         super(context);
@@ -42,7 +45,19 @@ public class AreaView extends View {
     private void init() {
         areaPaint = new Paint();
         areaPaint.setColor(Color.BLACK);
-        areaPaint.setMaskFilter(new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL));
+        areaPaint.setAntiAlias(true);
+        areaPaint.setDither(true);
+        areaPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        innerPaint = new Paint();
+        innerPaint.setColor(Color.WHITE);
+        innerPaint.setAntiAlias(true);
+        innerPaint.setDither(true);
+        innerPaint.setStyle(Paint.Style.STROKE);
+        innerPaint.setStrokeWidth(3);
+        textPaint = new Paint();
+        textPaint.setColor(Color.WHITE);
+        textPaint.setStyle(Paint.Style.STROKE);
+        textPaint.setTextSize(42);
     }
 
     public Area getArea() {
@@ -55,14 +70,30 @@ public class AreaView extends View {
         requestLayout();
     }
 
+    public AreaRect incrementPosition() {
+        currentInnerPosition = 0;
+        invalidate();
+        requestLayout();
+        return getAreaRectForPosition(currentInnerPosition);
+    }
+
+    private AreaRect getAreaRectForPosition(final int position) {
+        if (position >= area.getRects().size()) {
+            return null;
+        }
+        return area.getRects().get(position);
+    }
+
     @Override
     protected void onDraw(final Canvas canvas) {
         canvas.save();
 
         drawArea(canvas);
+        drawInnerAreas(canvas);
 
         canvas.restore();
     }
+
 
     private void drawArea(final Canvas canvas) {
         if (area == null) {
@@ -71,9 +102,33 @@ public class AreaView extends View {
         final Rect areaRect = area.getAreaRect();
 
         fillOutsideRect(canvas, areaRect);
-//        canvas.drawRoundRect(areaRect);
-//        canvas.drawRect(areaRect, areaPaint);
+    }
 
+    private void drawInnerAreas(final Canvas canvas) {
+        if (area == null || currentInnerPosition == -1) {
+            return;
+        }
+        final Rect parentRect = area.getAreaRect();
+        for (int i = 0; i <= currentInnerPosition; i++) {
+            final Rect rectForInnerArea = createRectForInnerArea(parentRect, i);
+            if (rectForInnerArea != null) {
+                final AreaRect areaRect = area.getRects().get(i);
+                canvas.drawRect(rectForInnerArea, innerPaint);
+                canvas.drawText(areaRect.getName(), rectForInnerArea.left, rectForInnerArea.top - 30, textPaint);
+            }
+        }
+    }
+
+    private Rect createRectForInnerArea(final Rect parentRect, final int position) {
+        if (parentRect == null || position == -1 || position >= area.getRects().size()) {
+            return null;
+        }
+        final AreaRect areaRect = area.getRects().get(position);
+        final int left = parentRect.left + areaRect.getPercentageFromParentLeft() * parentRect.width() / 100;
+        final int top = parentRect.top + areaRect.getPercentageFromParentTop() * parentRect.height() / 100;
+        final int right = left + areaRect.getPercentageWidth() * parentRect.width() / 100;
+        final int bottom = top + areaRect.getPercentageHeight() * parentRect.height() / 100;
+        return new Rect(left, top, right, bottom);
     }
 
     private void fillOutsideRect(final Canvas canvas, final Rect rect) {

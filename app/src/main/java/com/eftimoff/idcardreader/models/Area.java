@@ -2,9 +2,10 @@ package com.eftimoff.idcardreader.models;
 
 import android.graphics.Rect;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Area {
+public class Area implements Serializable {
 
     private List<AreaRect> rects;
 

@@ -1,15 +1,21 @@
 package com.eftimoff.idcardreader.models;
 
-import android.graphics.Rect;
+import java.io.Serializable;
 
-public class AreaRect {
+public class AreaRect implements Serializable {
 
     private String name;
-    private Rect rect;
+    private int percentageFromParentLeft;
+    private int percentageFromParentTop;
+    private int percentageWidth;
+    private int percentageHeight;
 
     private AreaRect(Builder builder) {
         this.name = builder.name;
-        this.rect = builder.rect;
+        this.percentageFromParentLeft = builder.percentageFromParentLeft;
+        this.percentageFromParentTop = builder.percentageFromParentTop;
+        this.percentageWidth = builder.percentageWidth;
+        this.percentageHeight = builder.percentageHeight;
     }
 
     public static Builder newAreaRect() {
@@ -20,14 +26,28 @@ public class AreaRect {
         return name;
     }
 
-    public Rect getRect() {
-        return rect;
+    public int getPercentageFromParentLeft() {
+        return percentageFromParentLeft;
     }
 
+    public int getPercentageFromParentTop() {
+        return percentageFromParentTop;
+    }
+
+    public int getPercentageWidth() {
+        return percentageWidth;
+    }
+
+    public int getPercentageHeight() {
+        return percentageHeight;
+    }
 
     public static final class Builder {
         private String name;
-        private Rect rect;
+        private int percentageFromParentLeft;
+        private int percentageFromParentTop;
+        private int percentageWidth;
+        private int percentageHeight;
 
         private Builder() {
         }
@@ -41,8 +61,23 @@ public class AreaRect {
             return this;
         }
 
-        public Builder rect(Rect rect) {
-            this.rect = rect;
+        public Builder percentageFromParentLeft(int percentageFromParentLeft) {
+            this.percentageFromParentLeft = percentageFromParentLeft;
+            return this;
+        }
+
+        public Builder percentageFromParentTop(int percentageFromParentTop) {
+            this.percentageFromParentTop = percentageFromParentTop;
+            return this;
+        }
+
+        public Builder percentageWidth(int percentageWidth) {
+            this.percentageWidth = percentageWidth;
+            return this;
+        }
+
+        public Builder percentageHeight(int percentageHeight) {
+            this.percentageHeight = percentageHeight;
             return this;
         }
     }
