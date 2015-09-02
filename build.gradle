@@ -22,8 +22,5 @@ allprojects {
         maven {
             url 'https://oss.sonatype.org/content/repositories/snapshots/'
         }
-        maven {
-            url 'http://maven.livotovlabs.pro/content/groups/public'
-        }
     }
 }

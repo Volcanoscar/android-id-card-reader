@@ -2,24 +2,29 @@ package com.eftimoff.idcardreader.ui.camera;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.eftimoff.idcardreader.models.Area;
-import com.eftimoff.idcardreader.models.AreaRect;
+import com.eftimoff.idcardreader.models.IdArea;
+import com.eftimoff.idcardreader.models.IdAreaField;
 
 public class AreaView extends View {
 
-    private Area area;
+    private IdArea idArea;
     private Paint areaPaint;
     private Paint innerPaint;
     private Paint textPaint;
     private int currentInnerPosition = -1;
+    private AreaViewListener listener;
 
     public AreaView(final Context context) {
         super(context);
@@ -44,7 +49,7 @@ public class AreaView extends View {
 
     private void init() {
         areaPaint = new Paint();
-        areaPaint.setColor(Color.BLACK);
+        areaPaint.setColor(Color.parseColor("#CC000000"));
         areaPaint.setAntiAlias(true);
         areaPaint.setDither(true);
         areaPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -58,30 +63,47 @@ public class AreaView extends View {
         textPaint.setColor(Color.WHITE);
         textPaint.setStyle(Paint.Style.STROKE);
         textPaint.setTextSize(42);
+
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                final IdAreaField idAreaField = start();
+                notifyOnStart(idAreaField);
+            }
+        });
     }
 
-    public Area getArea() {
-        return area;
+    public IdArea getIdArea() {
+        return idArea;
     }
 
-    public void setArea(final Area area) {
-        this.area = area;
+    public void setIdArea(final IdArea idArea) {
+        this.idArea = idArea;
         invalidate();
         requestLayout();
     }
 
-    public AreaRect incrementPosition() {
+    public IdAreaField increment(final String text) {
+        final IdAreaField idAreaField = idArea.getRects().get(currentInnerPosition);
+        idAreaField.setValue(text);
+        currentInnerPosition++;
+        invalidate();
+        requestLayout();
+        return getAreaRectForPosition(currentInnerPosition);
+    }
+
+    public IdAreaField start() {
         currentInnerPosition = 0;
         invalidate();
         requestLayout();
         return getAreaRectForPosition(currentInnerPosition);
     }
 
-    private AreaRect getAreaRectForPosition(final int position) {
-        if (position >= area.getRects().size()) {
+    private IdAreaField getAreaRectForPosition(final int position) {
+        if (position >= idArea.getRects().size()) {
             return null;
         }
-        return area.getRects().get(position);
+        return idArea.getRects().get(position);
     }
 
     @Override
@@ -96,38 +118,71 @@ public class AreaView extends View {
 
 
     private void drawArea(final Canvas canvas) {
-        if (area == null) {
+        if (idArea == null) {
             return;
         }
-        final Rect areaRect = area.getAreaRect();
+        final Rect areaRect = idArea.getAreaRect();
+        // same constants as above except innerREctFillColor is not used. Instead:
+        int outerFillColor = 0x77000000;
 
-        fillOutsideRect(canvas, areaRect);
+        // first create an off-screen bitmap and its canvas
+        final Bitmap bitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas auxCanvas = new Canvas(bitmap);
+
+        // then fill the bitmap with the desired outside color
+        final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(outerFillColor);
+        paint.setStyle(Paint.Style.FILL);
+        auxCanvas.drawPaint(paint);
+
+        // then punch a transparent hole in the shape of the rect
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        auxCanvas.drawRoundRect(new RectF(areaRect.left, areaRect.top, areaRect.right, areaRect.bottom), 50, 50, paint);
+
+        // then draw the white rect border (being sure to get rid of the xfer mode!)
+        paint.setXfermode(null);
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.STROKE);
+        auxCanvas.drawRoundRect(new RectF(areaRect.left, areaRect.top, areaRect.right, areaRect.bottom), 50, 50, paint);
+
+        // finally, draw the whole thing to the original canvas
+        canvas.drawBitmap(bitmap, 0, 0, paint);
     }
 
     private void drawInnerAreas(final Canvas canvas) {
-        if (area == null || currentInnerPosition == -1) {
+        if (currentInnerPosition == -1) {
+            final Rect parentRect = idArea.getAreaRect();
+            canvas.drawText("Place your ID card and click anywhere to start scanning.", parentRect.left, parentRect.bottom + 50, textPaint);
             return;
         }
-        final Rect parentRect = area.getAreaRect();
+        final Rect parentRect = idArea.getAreaRect();
         for (int i = 0; i <= currentInnerPosition; i++) {
+            if (i >= idArea.getRects().size()) {
+                notifyOnFinish();
+                return;
+            }
+            final IdAreaField idAreaField = idArea.getRects().get(i);
             final Rect rectForInnerArea = createRectForInnerArea(parentRect, i);
+            if (idAreaField.hasValue()) {
+                canvas.drawText(idAreaField.getValue(), rectForInnerArea.left, rectForInnerArea.centerY(), textPaint);
+                continue;
+            }
             if (rectForInnerArea != null) {
-                final AreaRect areaRect = area.getRects().get(i);
                 canvas.drawRect(rectForInnerArea, innerPaint);
-                canvas.drawText(areaRect.getName(), rectForInnerArea.left, rectForInnerArea.top - 30, textPaint);
+                canvas.drawText(idAreaField.getName(), rectForInnerArea.left, rectForInnerArea.top - 30, textPaint);
             }
         }
     }
 
     private Rect createRectForInnerArea(final Rect parentRect, final int position) {
-        if (parentRect == null || position == -1 || position >= area.getRects().size()) {
+        if (parentRect == null || position == -1 || position >= idArea.getRects().size()) {
             return null;
         }
-        final AreaRect areaRect = area.getRects().get(position);
-        final int left = parentRect.left + areaRect.getPercentageFromParentLeft() * parentRect.width() / 100;
-        final int top = parentRect.top + areaRect.getPercentageFromParentTop() * parentRect.height() / 100;
-        final int right = left + areaRect.getPercentageWidth() * parentRect.width() / 100;
-        final int bottom = top + areaRect.getPercentageHeight() * parentRect.height() / 100;
+        final IdAreaField idAreaField = idArea.getRects().get(position);
+        final int left = parentRect.left + idAreaField.getPercentageFromParentLeft() * parentRect.width() / 100;
+        final int top = parentRect.top + idAreaField.getPercentageFromParentTop() * parentRect.height() / 100;
+        final int right = left + idAreaField.getPercentageWidth() * parentRect.width() / 100;
+        final int bottom = top + idAreaField.getPercentageHeight() * parentRect.height() / 100;
         return new Rect(left, top, right, bottom);
     }
 
@@ -140,5 +195,29 @@ public class AreaView extends View {
         canvas.drawRect(left, areaPaint);
         canvas.drawRect(right, areaPaint);
         canvas.drawRect(bottom, areaPaint);
+    }
+
+    public void setListener(final AreaViewListener listener) {
+        this.listener = listener;
+    }
+
+    private void notifyOnStart(final IdAreaField idAreaField) {
+        if (listener != null) {
+            listener.onStart(idAreaField);
+        }
+    }
+
+    private void notifyOnFinish() {
+        if (listener != null) {
+            listener.onFinish();
+        }
+    }
+
+    public interface AreaViewListener {
+
+        void onStart(final IdAreaField idAreaField);
+
+        void onFinish();
+
     }
 }

@@ -128,7 +128,8 @@ public class ShowCameraView extends FrameLayout implements SurfaceHolder.Callbac
 
     public synchronized void stop() {
         if (cameraIsStarting.get()) {
-            throw new RuntimeException("Cannot stop the camera while it is being started. Wait till start process completes, then stop it.");
+            return;
+//            throw new RuntimeException("Cannot stop the camera while it is being started. Wait till start process completes, then stop it.");
         }
 
         if (!cameraIsStopping.compareAndSet(false, true)) {

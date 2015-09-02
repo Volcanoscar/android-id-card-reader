@@ -7,5 +7,6 @@
     <string name="passport">Passport</string>
     <string name="id_card_front">Id Front</string>
     <string name="id_card_back">Id Back</string>
-    
+    <string name="constructor_bulgarian_old">Id card old</string>
+
 </resources>

@@ -18,7 +18,6 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.choose.ChooseActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

@@ -71,20 +71,20 @@
                         android:background="@drawable/gray_button_selector"
                         android:gravity="center"
                         android:padding="10dp"
-                        android:text="@string/passport"/>
+                        tools:text="@string/passport"/>
 
                     <TextView
-                        android:id="@+id/id_card_back"
+                        android:id="@+id/id_card_old"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
                         android:background="@drawable/gray_button_selector"
                         android:gravity="center"
                         android:padding="10dp"
-                        android:text="@string/id_card_back"/>
+                        tools:text="@string/id_card_back"/>
 
                     <TextView
-                        android:id="@+id/id_card_front"
+                        android:id="@+id/id_card"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="5dp"
@@ -92,7 +92,7 @@
                         android:background="@drawable/gray_button_selector"
                         android:gravity="center"
                         android:padding="10dp"
-                        android:text="@string/id_card_front"/>
+                        tools:text="@string/id_card_front"/>
 
                 </LinearLayout>
             </LinearLayout>

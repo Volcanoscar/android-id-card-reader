@@ -5,13 +5,13 @@ import android.graphics.Rect;
 import java.io.Serializable;
 import java.util.List;
 
-public class Area implements Serializable {
+public class IdArea implements Serializable {
 
-    private List<AreaRect> rects;
+    private List<IdAreaField> rects;
 
-    private Rect areaRect;
+    private transient Rect areaRect;
 
-    private Area(Builder builder) {
+    private IdArea(Builder builder) {
         this.rects = builder.rects;
         this.areaRect = builder.areaRect;
     }
@@ -20,7 +20,7 @@ public class Area implements Serializable {
         return new Builder();
     }
 
-    public List<AreaRect> getRects() {
+    public List<IdAreaField> getRects() {
         return rects;
     }
 
@@ -30,17 +30,17 @@ public class Area implements Serializable {
 
 
     public static final class Builder {
-        private List<AreaRect> rects;
+        private List<IdAreaField> rects;
         private Rect areaRect;
 
         private Builder() {
         }
 
-        public Area build() {
-            return new Area(this);
+        public IdArea build() {
+            return new IdArea(this);
         }
 
-        public Builder rects(List<AreaRect> rects) {
+        public Builder rects(List<IdAreaField> rects) {
             this.rects = rects;
             return this;
         }

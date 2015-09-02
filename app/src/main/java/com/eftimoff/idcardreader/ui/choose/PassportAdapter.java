@@ -6,16 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.eftimoff.idcardreader.R;
 import com.eftimoff.idcardreader.models.Passport;
-import com.eftimoff.idcardreader.models.PassportEnum;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 
 import butterknife.Bind;
@@ -37,21 +34,6 @@ public class PassportAdapter extends RecyclerView.Adapter<PassportAdapter.ViewHo
         final Passport passport = passportList.get(position);
         holder.name.setText(passport.getName());
         Glide.with(holder.flag.getContext()).load(passport.getFlagImage()).fitCenter().centerCrop().into(holder.flag);
-        changeButtonsVisibility(holder, passport.getPassportEnums());
-    }
-
-    private void changeButtonsVisibility(final ViewHolder holder, final EnumSet<PassportEnum> passportEnums) {
-        if (!passportEnums.contains(PassportEnum.PASSPORT)) {
-            holder.passport.setVisibility(View.GONE);
-        }
-
-        if (!passportEnums.contains(PassportEnum.ID_CARD_BACK)) {
-            holder.idCardBack.setVisibility(View.GONE);
-        }
-
-        if (!passportEnums.contains(PassportEnum.ID_CARD_FRONT)) {
-            holder.idCardFront.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -75,49 +57,23 @@ public class PassportAdapter extends RecyclerView.Adapter<PassportAdapter.ViewHo
         ImageView flag;
         @Bind(R.id.name)
         TextView name;
-        @Bind(R.id.buttonsContainer)
-        LinearLayout buttonsContainer;
-        @Bind(R.id.passport)
-        TextView passport;
-        @Bind(R.id.id_card_back)
-        TextView idCardBack;
-        @Bind(R.id.id_card_front)
-        TextView idCardFront;
 
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
             view.setOnClickListener(this);
-            passport.setOnClickListener(this);
-            idCardBack.setOnClickListener(this);
-            idCardFront.setOnClickListener(this);
         }
 
         @Override
         public void onClick(final View v) {
-            if (v.getId() == passport.getId()) {
-                final int position = getAdapterPosition();
-                getInformationAndSend(position, PassportEnum.PASSPORT);
-                return;
-            }
-            if (v.getId() == idCardBack.getId()) {
-                final int position = getAdapterPosition();
-                getInformationAndSend(position, PassportEnum.ID_CARD_BACK);
-                return;
-            }
-            if (v.getId() == idCardFront.getId()) {
-                final int position = getAdapterPosition();
-                getInformationAndSend(position, PassportEnum.ID_CARD_FRONT);
-                return;
-            }
-            buttonsContainer.setVisibility(buttonsContainer.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            final int position = getAdapterPosition();
+            getInformationAndSend(position);
         }
     }
 
-    private void getInformationAndSend(final int position, final PassportEnum passportEnum) {
+    private void getInformationAndSend(final int position) {
         if (listener != null) {
             final Passport passport = passportList.get(position);
-            passport.setChosenPassportEnum(passportEnum);
             listener.onChoose(passport);
         }
     }

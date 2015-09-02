@@ -10,6 +10,6 @@ public interface PassportService {
 
     void addCountry(final Passport passport);
 
-    Observable<List<Passport>> getCountries();
+    Observable<List<Passport>> getPassport();
 
 }

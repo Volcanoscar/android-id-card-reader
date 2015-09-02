@@ -2,7 +2,7 @@ package com.eftimoff.idcardreader.components.tesseract;
 
 import android.graphics.Rect;
 
-import com.eftimoff.idcardreader.components.models.TesseractResult;
+import com.eftimoff.idcardreader.components.tesseract.models.TesseractResult;
 import com.eftimoff.idcardreader.components.tesseract.listeners.DownloadListener;
 
 import rx.Observable;

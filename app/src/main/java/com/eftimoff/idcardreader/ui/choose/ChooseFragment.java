@@ -88,7 +88,7 @@ public class ChooseFragment extends BaseFragment {
 
     @Override
     protected void init() {
-        final Observable<List<Passport>> observableCountries = passportService.getCountries();
+        final Observable<List<Passport>> observableCountries = passportService.getPassport();
         observableCountries.subscribe(new Action1<List<Passport>>() {
             @Override
             public void call(final List<Passport> countries) {

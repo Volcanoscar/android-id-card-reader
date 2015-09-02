@@ -3,7 +3,7 @@ package com.eftimoff.idcardreader.components.tesseract;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 
-import com.eftimoff.idcardreader.components.models.TesseractResult;
+import com.eftimoff.idcardreader.components.tesseract.models.TesseractResult;
 import com.eftimoff.idcardreader.components.tesseract.images.TesseractBitmapConverter;
 import com.eftimoff.idcardreader.components.tesseract.listeners.DownloadListener;
 import com.eftimoff.idcardreader.components.tesseract.listeners.GzipFileDownloadListener;

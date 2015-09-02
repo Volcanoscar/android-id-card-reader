@@ -1,4 +1,4 @@
-package com.eftimoff.idcardreader.components.models;
+package com.eftimoff.idcardreader.components.tesseract.models;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
