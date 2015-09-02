@@ -2385,7 +2385,7 @@ either the \`install' or \`cp' program.
 
 The following components of INSTALL-COMMAND are treated specially:
 
-  -inst-prefix-dir PREFIX-DIR  Use PREFIX-DIR as a staging area for installation
+  -inst-prefix-dir PREFIX-DIR  Use PREFIX-DIR as a staging idArea for installation
 
 The rest of the components are interpreted as arguments to that command (only
 BSD-compatible install options are recognized)."

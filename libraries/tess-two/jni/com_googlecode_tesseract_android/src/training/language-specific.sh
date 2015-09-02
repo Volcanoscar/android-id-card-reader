@@ -73,7 +73,7 @@ EARLY_LATIN_FONTS=(
     "${FRAKTUR_FONTS[@]}" \
     "${LATIN_FONTS[@]}" \
     # The Wyld font family renders early modern ligatures encoded in the private
-    # unicode area.
+    # unicode idArea.
     "Wyld" \
     "Wyld Italic" \
     # Fonts that render the Yogh symbol (U+021C, U+021D) found in Old English.

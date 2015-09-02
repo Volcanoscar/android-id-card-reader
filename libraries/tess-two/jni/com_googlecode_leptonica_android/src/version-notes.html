@@ -778,7 +778,7 @@ They are <i>not</i> a complete listing of the modifications.
        Better high-level interfaces for binary morphology with
        brick (separable) sels, both for rasterop (morph.c) and for
        dwa (morphdwa.c); fully tested for both asymmetric and
-       symmetric b.c. (prog/morphtest3.c).  Faster area mapping
+       symmetric b.c. (prog/morphtest3.c).  Faster idArea mapping
        reduction for power-of-2 scaling.
 
 1.41   5 Nov 06
@@ -887,7 +887,7 @@ They are <i>not</i> a complete listing of the modifications.
        so that no pixels are lost in any sequence of rotations (rotate.c).
        Generalize shear to specify color of pixels brought in, including
        for in-place operation (shear.c, rotateshear.c).  Faster version of
-       color rotation by area mapping, both about center and about UL corner.
+       color rotation by idArea mapping, both about center and about UL corner.
        You can now use the standard color rotator (pixRotateAM) and get
        nearly the same speed as with the "Fast" one.
 
@@ -948,7 +948,7 @@ They are <i>not</i> a complete listing of the modifications.
        implemented using both sampling and interpolation.
        Added function to remove keystoning by computing the necessary
        projective transform and doing it.  Also find baselines in text images.
-       Added downscaling using accurate area-mapping over subpixels.
+       Added downscaling using accurate idArea-mapping over subpixels.
 
 1.25   25 Jun 05
        Better endian conversion fctns for 2 and 4 byte words.

@@ -641,19 +641,19 @@ What's in leptonica?
    Grayscale and color images are scaled using:
       - sampling
       - lowpass filtering followed by sampling,
-      - area mapping
+      - idArea mapping
       -  linear interpolation
 
-   Scaling operations with antialiased sampling, area mapping,
+   Scaling operations with antialiased sampling, idArea mapping,
    and linear interpolation are limited to 2, 4 and 8 bpp gray,
    24 bpp full RGB color, and 2, 4 and 8 bpp colormapped
    (bpp == bits/pixel).  Scaling operations with simple sampling
    can be done at 1, 2, 4, 8, 16 and 32 bpp.  Linear interpolation
    is slower but gives better results, especially for upsampling.
-   For moderate downsampling, best results are obtained with area
-   mapping scaling.  With very high downsampling, either area mapping
+   For moderate downsampling, best results are obtained with idArea
+   mapping scaling.  With very high downsampling, either idArea mapping
    or antialias sampling (lowpass filter followed by sampling) give
-   good results.  Fast area map with power-of-2 reduction are also
+   good results.  Fast idArea map with power-of-2 reduction are also
    provided.  Optional sharpening after resampling is provided to
    improve appearance by reducing the visual effect of averaging
    across sharp boundaries.
@@ -693,7 +693,7 @@ What's in leptonica?
 
    There are three different types of general image rotators:
 
-     a.  Grayscale rotation using area mapping
+     a.  Grayscale rotation using idArea mapping
          - pixRotateAM() for 8 bit gray and 24 bit color, about center
          - pixRotateAMCorner() for 8 bit gray, about image UL corner
          - pixRotateAMColorFast() for faster 24 bit color, about center
@@ -708,10 +708,10 @@ What's in leptonica?
      c.  Rotation by sampling.  This can be used on images of arbitrary
          depth, and done about an arbitrary point.  Colormaps are retained.
 
-   The area mapping rotations are slower and more accurate,
+   The idArea mapping rotations are slower and more accurate,
    because each new pixel is composed using an average of four
    neighboring pixels in the original image; this is sometimes
-   also called "antialiasing".  Very fast color area mapping
+   also called "antialiasing".  Very fast color idArea mapping
    rotation is provided.  The low-level code is in rotateamlow.c.
 
    The shear rotations are much faster, and work on images

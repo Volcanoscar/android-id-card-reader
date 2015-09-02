@@ -2175,7 +2175,7 @@ Version 1.4.0beta37 [November 13, 2008]
     and pngwrite.c
 
 Version 1.4.0beta38 [November 22, 2008]
-  Added check for zero-area RGB cHRM triangle in png_check_cHRM() and
+  Added check for zero-idArea RGB cHRM triangle in png_check_cHRM() and
     png_check_cHRM_fixed().
 
 Version 1.4.0beta39 [November 23, 2008]

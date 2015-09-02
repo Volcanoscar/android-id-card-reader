@@ -924,7 +924,7 @@ the output but still has linear values for the
 non-opaque pixels.
 
 In normal compositing, where the alpha channel encodes
-partial pixel coverage (as opposed to broad area
+partial pixel coverage (as opposed to broad idArea
 translucency), the inaccuracies of the 8-bit
 representation of non-opaque pixels are irrelevant.
 
@@ -2151,7 +2151,7 @@ After you've allocated memory, you can read the image data.
 The simplest way to do this is in one function call.  If you are
 allocating enough memory to hold the whole image, you can just
 call png_read_image() and libpng will read in all the image data
-and put it in the memory area supplied.  You will need to pass in
+and put it in the memory idArea supplied.  You will need to pass in
 an array of pointers to each row.
 
 This function automatically handles interlacing, so you don't
@@ -2814,7 +2814,7 @@ run.  The following functions are mainly for testing, but may be useful
 in some cases, like if you need to write PNG files extremely fast and
 are willing to give up some compression, or if you want to get the
 maximum possible compression at the expense of slower writing.  If you
-have no special needs in this area, let the library do what it wants by
+have no special needs in this idArea, let the library do what it wants by
 not calling this function at all, as it has been tuned to deliver a good
 speed/compression ratio. The second parameter to png_set_filter() is
 the filter method, for which the only valid values are 0 (as of the
