@@ -1,0 +1,68 @@
+[
+  {
+    "type": "BULGARIAN_ID_CARD_OLD",
+    "name": "Bulgaria",
+    "language": "bul",
+    "flagImage": "http://www.mapsofworld.com/images/world-countries-flags/bulgeria-flag.gif",
+    "idArea": {
+      "rects": [
+        {
+          "field": "ID",
+          "percentageFromParentLeft": 15,
+          "percentageFromParentTop": 24,
+          "percentageWidth": 19,
+          "percentageHeight": 7
+        },
+        {
+          "field": "FIRST_NAME",
+          "percentageFromParentLeft": 47,
+          "percentageFromParentTop": 33,
+          "percentageWidth": 19,
+          "percentageHeight": 7
+        },
+        {
+          "field": "LAST_NAME",
+          "percentageFromParentLeft": 48,
+          "percentageFromParentTop": 22,
+          "percentageWidth": 21,
+          "percentageHeight": 7
+        },
+        {
+          "field": "MIDDLE_NAME",
+          "percentageHeight": 7,
+          "percentageFromParentLeft": 49,
+          "percentageFromParentTop": 46,
+          "percentageWidth": 21
+        },
+        {
+          "field": "GENDER",
+          "percentageFromParentLeft": 53,
+          "percentageFromParentTop": 59,
+          "percentageWidth": 3,
+          "percentageHeight": 7
+        },
+        {
+          "field": "PERSONAL_NUMBER",
+          "percentageFromParentLeft": 76,
+          "percentageFromParentTop": 59,
+          "percentageWidth": 21,
+          "percentageHeight": 7
+        },
+        {
+          "field": "DATE_OF_BIRTH",
+          "percentageFromParentLeft": 67,
+          "percentageFromParentTop": 72,
+          "percentageWidth": 21,
+          "percentageHeight": 7
+        },
+        {
+          "field": "EXPIRATION_DATE",
+          "percentageFromParentLeft": 67,
+          "percentageFromParentTop": 77,
+          "percentageWidth": 21,
+          "percentageHeight": 7
+        }
+      ]
+    }
+  }
+]

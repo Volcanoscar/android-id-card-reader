@@ -1,10 +1,12 @@
 package com.eftimoff.idcardreader.models;
 
+import com.eftimoff.idcardreader.R;
+
 import java.io.Serializable;
 
 public class IdAreaField implements Serializable {
 
-    private String name;
+    private int name;
     private int percentageFromParentLeft;
     private int percentageFromParentTop;
     private int percentageWidth;
@@ -29,8 +31,12 @@ public class IdAreaField implements Serializable {
         return new Builder();
     }
 
-    public String getName() {
+    public int getName() {
         return name;
+    }
+
+    public void setName(final int name) {
+        this.name = name;
     }
 
     public int getPercentageFromParentLeft() {
@@ -66,7 +72,7 @@ public class IdAreaField implements Serializable {
     }
 
     public static final class Builder {
-        private String name;
+        private int name;
         private int percentageFromParentLeft;
         private int percentageFromParentTop;
         private int percentageWidth;
@@ -80,7 +86,7 @@ public class IdAreaField implements Serializable {
             return new IdAreaField(this);
         }
 
-        public Builder name(String name) {
+        public Builder name(int name) {
             this.name = name;
             return this;
         }
@@ -112,6 +118,16 @@ public class IdAreaField implements Serializable {
     }
 
     public enum Field {
-        ID, FIRST_NAME, MIDDLE_NAME, GENDER, PERSONAL_NUMBER, DATE_OF_BIRTH, EXPIRATION_DATE, LAST_NAME
+        ID(R.string.field_id_card), FIRST_NAME(R.string.field_first_name), LAST_NAME(R.string.field_last_name), MIDDLE_NAME(R.string.field_middle_name), GENDER(R.string.field_gender), PERSONAL_NUMBER(R.string.field_personal_number), DATE_OF_BIRTH(R.string.field_date_of_birth), EXPIRATION_DATE(R.string.field_expiration_date);
+
+        private final int stringName;
+
+        Field(final int stringName) {
+            this.stringName = stringName;
+        }
+
+        public int getStringName() {
+            return stringName;
+        }
     }
 }

@@ -169,7 +169,7 @@ public class AreaView extends View {
             }
             if (rectForInnerArea != null) {
                 canvas.drawRect(rectForInnerArea, innerPaint);
-                canvas.drawText(idAreaField.getName(), rectForInnerArea.left, rectForInnerArea.top - 30, textPaint);
+                canvas.drawText(getResources().getString(idAreaField.getName()), rectForInnerArea.left, rectForInnerArea.top - 30, textPaint);
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.eftimoff.idcardreader.ui.camera;
 
+import android.app.Activity;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -13,7 +14,7 @@ import com.eftimoff.idcardreader.R;
 import com.eftimoff.idcardreader.components.tesseract.DaggerTessaractComponent;
 import com.eftimoff.idcardreader.components.tesseract.TessaractModule;
 import com.eftimoff.idcardreader.components.tesseract.Tesseract;
-import com.eftimoff.idcardreader.components.tesseract.listeners.DownloadListener;
+import com.eftimoff.idcardreader.components.tesseract.listeners.ProgressListener;
 import com.eftimoff.idcardreader.components.tesseract.models.TesseractResult;
 import com.eftimoff.idcardreader.models.IdAreaField;
 import com.eftimoff.idcardreader.models.IdCard;
@@ -28,6 +29,10 @@ import rx.Observer;
 
 
 public class ShowCameraFragment extends BaseFragment {
+
+    public interface ShowCameraFragmentDelegate {
+        void onFinish(final IdCard idCard);
+    }
 
     ///////////////////////////////////
     ///          CONSTANTS          ///
@@ -56,6 +61,8 @@ public class ShowCameraFragment extends BaseFragment {
     private ShowCameraSettings cameraSettings;
     private IdAreaField idAreaField;
 
+    private ShowCameraFragmentDelegate delegate;
+
 
     public static ShowCameraFragment getInstance(final ShowCameraSettings cameraSettings) {
         final ShowCameraFragment showCameraFragment = new ShowCameraFragment();
@@ -81,6 +88,17 @@ public class ShowCameraFragment extends BaseFragment {
     }
 
     @Override
+    public void onAttach(final Activity activity) {
+        super.onAttach(activity);
+        try {
+            delegate = (ShowCameraFragmentDelegate) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement ChooseFragmentDelegate");
+        }
+    }
+
+    @Override
     protected int layoutResourceId() {
         return R.layout.fragment_camera;
     }
@@ -101,7 +119,7 @@ public class ShowCameraFragment extends BaseFragment {
     @Override
     protected void init() {
         final Passport passport = cameraSettings.getPassport();
-        tesseract.init(passport.getLanguage(), downloadListener);
+        tesseract.init(passport.getLanguage(), progressListener);
     }
 
     @Override
@@ -176,7 +194,7 @@ public class ShowCameraFragment extends BaseFragment {
     };
 
 
-    private final DownloadListener downloadListener = new DownloadListener() {
+    private final ProgressListener progressListener = new ProgressListener() {
         @Override
         public void onStart() {
             showLoadingDialog();
@@ -211,7 +229,7 @@ public class ShowCameraFragment extends BaseFragment {
         public void onNext(final TesseractResult tesseractResult) {
             if (tesseractResult.getMeanConfidence() > 80) {
                 final String text = tesseractResult.getText();
-                cameraSettings.getPassport().getIdCardConstructor().setText(text, idAreaField);
+                cameraSettings.getPassport().getType().getIdCardConstructor().setText(text, idAreaField);
                 idAreaField = areaView.increment(text);
             }
             cameraView.enablePreviewGrabbing();
@@ -226,8 +244,8 @@ public class ShowCameraFragment extends BaseFragment {
 
         @Override
         public void onFinish() {
-            final IdCard idCard = cameraSettings.getPassport().getIdCardConstructor().construct();
-            Toast.makeText(getActivity(), new Date(idCard.getDateOfBirth() * 1000).toString(), Toast.LENGTH_LONG).show();
+            final IdCard idCard = cameraSettings.getPassport().getType().getIdCardConstructor().construct();
+            delegate.onFinish(idCard);
         }
     };
 }

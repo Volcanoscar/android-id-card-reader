@@ -9,4 +9,14 @@
     <string name="id_card_back">Id Back</string>
     <string name="constructor_bulgarian_old">Id card old</string>
 
+
+    <string name="field_id_card">Id Card</string>
+    <string name="field_first_name">First name</string>
+    <string name="field_last_name">Last name</string>
+    <string name="field_middle_name">Middle name</string>
+    <string name="field_gender">Gender</string>
+    <string name="field_personal_number">Personal number</string>
+    <string name="field_date_of_birth">Date of birth</string>
+    <string name="field_expiration_date">Expiration date</string>
+
 </resources>

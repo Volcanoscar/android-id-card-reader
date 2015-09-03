@@ -28,6 +28,9 @@ public class IdArea implements Serializable {
         return areaRect;
     }
 
+    public void setAreaRect(final Rect areaRect) {
+        this.areaRect = areaRect;
+    }
 
     public static final class Builder {
         private List<IdAreaField> rects;

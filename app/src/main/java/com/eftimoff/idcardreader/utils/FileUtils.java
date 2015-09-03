@@ -62,6 +62,10 @@ public class FileUtils {
     }
 
     private static String downloadFileToSdCardUtil(final InputStream inputStream, final String fileName) throws Exception {
+        final File parentFile = new File(SD_CARD_TRAINED_DATA_PATH);
+        if (!parentFile.exists()) {
+            parentFile.mkdirs();
+        }
         final File sdCardFile = new File(SD_CARD_TRAINED_DATA_PATH, fileName);
 
         FileOutputStream fileOutputStream = null;

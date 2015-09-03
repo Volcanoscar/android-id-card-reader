@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import com.eftimoff.idcardreader.R;
 import com.eftimoff.idcardreader.components.passport.DaggerPassportComponent;
 import com.eftimoff.idcardreader.components.passport.PassportModule;
-import com.eftimoff.idcardreader.components.passport.PassportService;
+import com.eftimoff.idcardreader.components.passport.service.PassportService;
 import com.eftimoff.idcardreader.models.Passport;
 import com.eftimoff.idcardreader.ui.common.BaseFragment;
 
@@ -88,7 +88,7 @@ public class ChooseFragment extends BaseFragment {
 
     @Override
     protected void init() {
-        final Observable<List<Passport>> observableCountries = passportService.getPassport();
+        final Observable<List<Passport>> observableCountries = passportService.getPassports();
         observableCountries.subscribe(new Action1<List<Passport>>() {
             @Override
             public void call(final List<Passport> countries) {

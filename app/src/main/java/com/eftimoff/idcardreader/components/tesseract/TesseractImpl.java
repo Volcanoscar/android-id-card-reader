@@ -5,7 +5,7 @@ import android.graphics.Rect;
 
 import com.eftimoff.idcardreader.components.tesseract.models.TesseractResult;
 import com.eftimoff.idcardreader.components.tesseract.images.TesseractBitmapConverter;
-import com.eftimoff.idcardreader.components.tesseract.listeners.DownloadListener;
+import com.eftimoff.idcardreader.components.tesseract.listeners.ProgressListener;
 import com.eftimoff.idcardreader.components.tesseract.listeners.GzipFileDownloadListener;
 import com.eftimoff.idcardreader.components.tesseract.logger.TesseractLogger;
 import com.eftimoff.idcardreader.components.tesseract.text.TesseractTextCleaner;
@@ -44,7 +44,7 @@ public class TesseractImpl implements Tesseract {
     }
 
     @Override
-    public void init(final String language, final DownloadListener downloadListener) {
+    public void init(final String language, final ProgressListener progressListener) {
         Preconditions.checkNotNull(language, "Language must not be null.");
 
         tesseractLogger.log("Tesseract.init() for language %s", language);
@@ -53,14 +53,14 @@ public class TesseractImpl implements Tesseract {
         tesseractLogger.log("Tesseract.init() Does path of trained data exists : %b", sdCardFileExists);
         if (sdCardFileExists) {
             final String trainedDataPath = trainedDataManager.getTrainedDataPath();
-            notifyOnStart(downloadListener);
+            notifyOnStart(progressListener);
             try {
                 tessBaseAPI.init(trainedDataPath, language);
             } catch (IllegalArgumentException e) {
-                notifyOnError(e, downloadListener);
+                notifyOnError(e, progressListener);
                 return;
             }
-            notifyOnDone(downloadListener);
+            notifyOnDone(progressListener);
             return;
         }
 
@@ -68,7 +68,7 @@ public class TesseractImpl implements Tesseract {
             @Override
             public void onStart() {
                 tesseractLogger.log("Tesseract.init() Start downloading the file to sd card.");
-                notifyOnStart(downloadListener);
+                notifyOnStart(progressListener);
             }
 
             @Override
@@ -76,33 +76,33 @@ public class TesseractImpl implements Tesseract {
                 tesseractLogger.log("Tesseract.init() Done downloading the file to sd card : %s", sdCardFilePath);
                 final String trainedDataPath = trainedDataManager.getTrainedDataPath();
                 tessBaseAPI.init(trainedDataPath, language);
-                notifyOnDone(downloadListener);
+                notifyOnDone(progressListener);
             }
 
             @Override
             public void onError(final Throwable e) {
                 tesseractLogger.error(e);
-                notifyOnError(e, downloadListener);
+                notifyOnError(e, progressListener);
             }
         });
 
     }
 
-    private void notifyOnError(final Throwable e, final DownloadListener downloadListener) {
-        if (downloadListener != null) {
-            downloadListener.onError(e);
+    private void notifyOnError(final Throwable e, final ProgressListener progressListener) {
+        if (progressListener != null) {
+            progressListener.onError(e);
         }
     }
 
-    private void notifyOnDone(final DownloadListener downloadListener) {
-        if (downloadListener != null) {
-            downloadListener.onDone();
+    private void notifyOnDone(final ProgressListener progressListener) {
+        if (progressListener != null) {
+            progressListener.onDone();
         }
     }
 
-    private void notifyOnStart(final DownloadListener downloadListener) {
-        if (downloadListener != null) {
-            downloadListener.onStart();
+    private void notifyOnStart(final ProgressListener progressListener) {
+        if (progressListener != null) {
+            progressListener.onStart();
         }
     }
 
