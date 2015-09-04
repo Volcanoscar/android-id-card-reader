@@ -24,6 +24,7 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
 
     private static final String EXTRA_SHOULD_SKIP_CHOOSE = "extra_should_skip_choose";
     private static final String EXTRA_SKIP_CHOOSE_TYPE = "extra_skip_choose_type";
+    private static final String EXTRA_ENABLE_LOGGER = "extra_enable_logger";
 
     @Override
     protected int layoutResourceId() {
@@ -37,7 +38,7 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
 
     @Override
     protected void init() {
-        final boolean shouldChooseSkipStep = getIntent().getBooleanExtra(EXTRA_SKIP_CHOOSE_TYPE, false);
+        final boolean shouldChooseSkipStep = getIntent().getBooleanExtra(EXTRA_SHOULD_SKIP_CHOOSE, false);
         if (shouldChooseSkipStep) {
             final PassportModule passportModule = new PassportModule(this);
             final PassportService passportService = DaggerPassportComponent.builder().passportModule(passportModule).build().provideCountryService();
@@ -65,9 +66,15 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
     public static class Builder {
 
         private PassportType passportType;
+        private boolean enableLogger;
 
         public Builder skipChooseStep(final PassportType passportType) {
             this.passportType = passportType;
+            return this;
+        }
+
+        public Builder enableLogger(final boolean enableLogger) {
+            this.enableLogger = enableLogger;
             return this;
         }
 
@@ -75,6 +82,7 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
             final Intent intent = new Intent(context, OcrActivity.class);
             intent.putExtra(EXTRA_SHOULD_SKIP_CHOOSE, passportType != null);
             intent.putExtra(EXTRA_SKIP_CHOOSE_TYPE, passportType);
+            intent.putExtra(EXTRA_ENABLE_LOGGER, enableLogger);
             return intent;
         }
     }

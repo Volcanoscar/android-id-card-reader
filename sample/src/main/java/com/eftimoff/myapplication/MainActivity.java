@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Intent intent = OcrActivity.buildIntent().build(getApplicationContext());
+        final Intent intent = OcrActivity.buildIntent().skipChooseStep(PassportType.BULGARIAN_ID_CARD_OLD).build(getApplicationContext());
         startActivity(intent);
     }
 }
