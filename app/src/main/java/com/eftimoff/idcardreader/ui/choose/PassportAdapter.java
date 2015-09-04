@@ -15,9 +15,6 @@ import com.eftimoff.idcardreader.models.Passport;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 public class PassportAdapter extends RecyclerView.Adapter<PassportAdapter.ViewHolder> {
 
     private List<Passport> passportList = new ArrayList<Passport>();
@@ -51,16 +48,15 @@ public class PassportAdapter extends RecyclerView.Adapter<PassportAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @Bind(R.id.card_view)
         CardView cardView;
-        @Bind(R.id.flag)
         ImageView flag;
-        @Bind(R.id.name)
         TextView name;
 
         public ViewHolder(View view) {
             super(view);
-            ButterKnife.bind(this, view);
+            cardView = (CardView) view.findViewById(R.id.card_view);
+            flag = (ImageView) view.findViewById(R.id.flag);
+            name = (TextView) view.findViewById(R.id.name);
             view.setOnClickListener(this);
         }
 

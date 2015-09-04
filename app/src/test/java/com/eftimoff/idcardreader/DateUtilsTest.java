@@ -27,9 +27,7 @@ public class DateUtilsTest {
     @Test
     public void testCleanText() throws ParseException {
         final long actual = dateFormat.parse("01021988").getTime() / 1000;
-        final long expected = 570672000;
-        final String s = new Date(570672000000l).toString();
-        System.out.println(s);
+        final long expected = 570664800;
         assertEquals(expected, actual);
     }
 }

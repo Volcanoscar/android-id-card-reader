@@ -21,9 +21,6 @@ import com.eftimoff.idcardreader.models.IdCard;
 import com.eftimoff.idcardreader.models.Passport;
 import com.eftimoff.idcardreader.ui.common.BaseFragment;
 
-import java.util.Date;
-
-import butterknife.Bind;
 import rx.Observable;
 import rx.Observer;
 
@@ -44,13 +41,9 @@ public class ShowCameraFragment extends BaseFragment {
     ///            VIEWS            ///
     ///////////////////////////////////
 
-    @Bind(R.id.flag)
     ImageView flag;
-    @Bind(R.id.cameraView)
     ShowCameraView cameraView;
-    @Bind(R.id.progressBar)
     ProgressBar progressBar;
-    @Bind(R.id.areaView)
     AreaView areaView;
 
     ///////////////////////////////////
@@ -62,7 +55,6 @@ public class ShowCameraFragment extends BaseFragment {
     private IdAreaField idAreaField;
 
     private ShowCameraFragmentDelegate delegate;
-
 
     public static ShowCameraFragment getInstance(final ShowCameraSettings cameraSettings) {
         final ShowCameraFragment showCameraFragment = new ShowCameraFragment();
@@ -109,7 +101,11 @@ public class ShowCameraFragment extends BaseFragment {
     }
 
     @Override
-    protected void setupViews() {
+    protected void setupViews(final View view) {
+        flag = (ImageView) view.findViewById(R.id.flag);
+        cameraView = (ShowCameraView) view.findViewById(R.id.cameraView);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        areaView = (AreaView) view.findViewById(R.id.areaView);
         final Passport passport = cameraSettings.getPassport();
         Glide.with(getActivity()).load(passport.getFlagImage()).into(flag);
         areaView.setIdArea(passport.getIdArea());

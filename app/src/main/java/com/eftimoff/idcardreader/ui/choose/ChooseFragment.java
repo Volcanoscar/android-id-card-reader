@@ -3,6 +3,7 @@ package com.eftimoff.idcardreader.ui.choose;
 import android.app.Activity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.eftimoff.idcardreader.R;
 import com.eftimoff.idcardreader.components.passport.DaggerPassportComponent;
@@ -14,8 +15,6 @@ import com.eftimoff.idcardreader.ui.common.BaseFragment;
 import java.io.Serializable;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.BindInt;
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -33,7 +32,6 @@ public class ChooseFragment extends BaseFragment {
     ///            VIEWS            ///
     ///////////////////////////////////
 
-    @Bind(R.id.recycler_view)
     RecyclerView recyclerView;
 
     ///////////////////////////////////
@@ -48,7 +46,6 @@ public class ChooseFragment extends BaseFragment {
     ///          RESOURCES          ///
     ///////////////////////////////////
 
-    @BindInt(R.integer.fragment_choose_column_number)
     int columnCount;
 
 
@@ -78,7 +75,9 @@ public class ChooseFragment extends BaseFragment {
     }
 
     @Override
-    protected void setupViews() {
+    protected void setupViews(final View view) {
+        columnCount = getResources().getInteger(R.integer.fragment_choose_column_number);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), columnCount));
         passportAdapter = new PassportAdapter();

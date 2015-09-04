@@ -1,5 +1,6 @@
 package com.eftimoff.idcardreader.ui.choose;
 
+import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
@@ -19,7 +20,7 @@ import java.util.List;
 import rx.Observable;
 import rx.Observer;
 
-public class ChooseActivity extends BaseActivity implements ChooseFragment.ChooseFragmentDelegate, ShowCameraFragment.ShowCameraFragmentDelegate {
+public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFragmentDelegate, ShowCameraFragment.ShowCameraFragmentDelegate {
 
     private static final String EXTRA_SHOULD_SKIP_CHOOSE = "extra_should_skip_choose";
     private static final String EXTRA_SKIP_CHOOSE_TYPE = "extra_skip_choose_type";
@@ -61,7 +62,7 @@ public class ChooseActivity extends BaseActivity implements ChooseFragment.Choos
         return new Builder();
     }
 
-    private static class Builder {
+    public static class Builder {
 
         private PassportType passportType;
 
@@ -70,8 +71,8 @@ public class ChooseActivity extends BaseActivity implements ChooseFragment.Choos
             return this;
         }
 
-        public Intent build() {
-            final Intent intent = new Intent();
+        public Intent build(final Context context) {
+            final Intent intent = new Intent(context, OcrActivity.class);
             intent.putExtra(EXTRA_SHOULD_SKIP_CHOOSE, passportType != null);
             intent.putExtra(EXTRA_SKIP_CHOOSE_TYPE, passportType);
             return intent;

@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import butterknife.ButterKnife;
-
 public abstract class BaseFragment extends Fragment {
 
     @Override
@@ -22,7 +20,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View view = inflater.inflate(layoutResourceId(), container, false);
-        ButterKnife.bind(this, view);
+        setupViews(view);
         return view;
     }
 
@@ -30,14 +28,7 @@ public abstract class BaseFragment extends Fragment {
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupComponents();
-        setupViews();
         init();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 
     public String getTAG() {
@@ -49,7 +40,7 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract void setupComponents();
 
-    protected abstract void setupViews();
+    protected abstract void setupViews(final View view);
 
     protected abstract void init();
 
