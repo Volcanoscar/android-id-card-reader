@@ -1,1 +1,1 @@
-include ':app',':libraries:tess-two', ':sample'
+include ':app',':libraries:tess-two'
