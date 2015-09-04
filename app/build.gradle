@@ -1,6 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.neenbedankt.android-apt'
 
+version = "1.0.0"
+group = "com.eftimoff.idcardreader"
+
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
