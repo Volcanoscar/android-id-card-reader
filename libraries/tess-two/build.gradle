@@ -25,4 +25,8 @@ android {
         res.srcDirs = ['res']
         jniLibs.srcDirs = ['libs']
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
