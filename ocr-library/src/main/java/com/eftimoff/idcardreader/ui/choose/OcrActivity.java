@@ -12,6 +12,7 @@ import com.eftimoff.idcardreader.models.IdCard;
 import com.eftimoff.idcardreader.models.Passport;
 import com.eftimoff.idcardreader.models.PassportType;
 import com.eftimoff.idcardreader.ui.camera.ShowCameraFragment;
+import com.eftimoff.idcardreader.ui.camera.ShowCameraSettings;
 import com.eftimoff.idcardreader.ui.common.BaseActivity;
 
 import java.util.List;
@@ -52,7 +53,15 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
 
     @Override
     public void onChoose(final Passport passport) {
-        startFragment(ShowCameraFragment.getInstance(passport));
+
+        final ShowCameraSettings showCameraSettings = ShowCameraSettings.newShowCameraSettings().
+                passport(passport).
+                enableLogging(getIntent().getBooleanExtra(EXTRA_ENABLE_LOGGER, false)).
+                build();
+
+        final ShowCameraFragment fragment = ShowCameraFragment.getInstance(showCameraSettings);
+
+        startFragment(fragment);
     }
 
     @Override

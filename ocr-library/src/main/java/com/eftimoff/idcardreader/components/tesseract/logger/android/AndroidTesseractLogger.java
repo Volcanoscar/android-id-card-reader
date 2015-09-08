@@ -9,7 +9,11 @@ public class AndroidTesseractLogger implements TesseractLogger {
 
     private static final String TAG = AndroidTesseractLogger.class.getSimpleName();
 
-    private boolean isLoggerEnabled = true;
+    private boolean isLoggerEnabled;
+
+    public AndroidTesseractLogger(final boolean isLoggerEnabled) {
+        this.isLoggerEnabled = isLoggerEnabled;
+    }
 
     @Override
     public boolean isEnabled() {

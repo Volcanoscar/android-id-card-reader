@@ -19,6 +19,12 @@ import dagger.Provides;
 @Module
 public class TessaractModule {
 
+    private boolean enableLogging;
+
+    public TessaractModule(final boolean enableLogging) {
+        this.enableLogging = enableLogging;
+    }
+
     @Provides
     @Singleton
     TesseractTextCleaner provideTesseractTextCleaner() {
@@ -34,7 +40,7 @@ public class TessaractModule {
     @Provides
     @Singleton
     TesseractLogger provideTesseractLogger() {
-        return new AndroidTesseractLogger();
+        return new AndroidTesseractLogger(enableLogging);
     }
 
     @Provides

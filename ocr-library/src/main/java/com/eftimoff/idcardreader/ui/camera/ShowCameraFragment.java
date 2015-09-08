@@ -64,15 +64,6 @@ public class ShowCameraFragment extends BaseFragment {
         return showCameraFragment;
     }
 
-    public static ShowCameraFragment getInstance(final Passport passport) {
-        final ShowCameraSettings cameraSettings = ShowCameraSettings.newShowCameraSettings().passport(passport).build();
-        final ShowCameraFragment showCameraFragment = new ShowCameraFragment();
-        final Bundle bundle = new Bundle();
-        bundle.putSerializable(KEY_SETTINGS, cameraSettings);
-        showCameraFragment.setArguments(bundle);
-        return showCameraFragment;
-    }
-
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +88,8 @@ public class ShowCameraFragment extends BaseFragment {
 
     @Override
     protected void setupComponents() {
-        tesseract = DaggerTessaractComponent.builder().tessaractModule(new TessaractModule()).build().provideTesseract();
+        final boolean enableLogging = cameraSettings.isEnableLogging();
+        tesseract = DaggerTessaractComponent.builder().tessaractModule(new TessaractModule(enableLogging)).build().provideTesseract();
     }
 
     @Override
