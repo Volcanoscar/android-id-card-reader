@@ -1,6 +1,22 @@
 # android-id-card-reader
 ID card reader OCR for android
 
+## Usage
+
+    final Intent intent = OcrActivity.buildIntent().build(getApplicationContext());
+    startActivityForResult(intent, 1);
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                final IdCard idCard = (IdCard) data.getSerializableExtra(OcrActivity.EXTRA_ID_CARD);
+                Log.i("HELLO", idCard.getFirstName());
+            }
+        }
+    }
+
 ## Depencies
 
  * Dagger 2
