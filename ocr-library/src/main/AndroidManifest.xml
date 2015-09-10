@@ -19,6 +19,7 @@
         <activity
             android:name=".ui.choose.OcrActivity"
             android:screenOrientation="landscape"
+            android:configChanges="screenSize|orientation|screenLayout"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
     </application>

@@ -17,7 +17,7 @@ public class YUVTesseractBitmapConverter implements TesseractBitmapConverter {
     @Override
     public Bitmap convertToBitmap(final byte[] array, final int width, final int height, final Rect rect) {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        final YuvImage image = new YuvImage(array, ImageFormat.NV21, rect.width(), rect.height(), null);
+        final YuvImage image = new YuvImage(array, ImageFormat.NV21, width, height, null);
         image.compressToJpeg(rect, JPEG_QUALITY, byteArrayOutputStream);
         return BitmapFactory.decodeByteArray(byteArrayOutputStream.toByteArray(), 0, byteArrayOutputStream.size());
     }

@@ -102,6 +102,7 @@ public class ShowCameraFragment extends BaseFragment {
         Glide.with(getActivity()).load(passport.getFlagImage()).into(flag);
         areaView.setIdArea(passport.getIdArea());
         areaView.setListener(areaViewListener);
+        areaView.setShowTempResults(cameraSettings.isShowTempResults());
     }
 
     @Override
@@ -215,7 +216,8 @@ public class ShowCameraFragment extends BaseFragment {
 
         @Override
         public void onNext(final TesseractResult tesseractResult) {
-            if (tesseractResult.getMeanConfidence() > 80) {
+            areaView.tempResult(tesseractResult);
+            if (tesseractResult.getMeanConfidence() > cameraSettings.getPercentageToCapture()) {
                 final String text = tesseractResult.getText();
                 cameraSettings.getPassport().getType().getIdCardConstructor().setText(text, idAreaField);
                 idAreaField = areaView.increment(text);

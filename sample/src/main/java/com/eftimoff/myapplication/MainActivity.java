@@ -10,9 +10,13 @@ import com.eftimoff.idcardreader.models.IdCard;
 import com.eftimoff.idcardreader.models.PassportType;
 import com.eftimoff.idcardreader.ui.choose.OcrActivity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
+
+    private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     private TextView firstName;
     private TextView middleName;
@@ -22,6 +26,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView personalNumber;
     private TextView dateOfBirth;
     private TextView expirationDate;
+    private TextView address;
+    private TextView idCreationDate;
+    private TextView placeOfBirth;
+    private TextView height;
 
 
     @Override
@@ -31,8 +39,10 @@ public class MainActivity extends AppCompatActivity {
         setupViews();
         if (savedInstanceState == null) {
             final Intent intent = OcrActivity.buildIntent()
-                    .skipChooseStep(PassportType.BULGARIAN_ID_CARD_OLD)
-                    .enableLogger(false)
+                    .skipChooseStep(PassportType.SENEGAL_ID_CARD)
+                    .enableLogger(true)
+                    .showTempResults(true)
+                    .percentageToCapture(75)
                     .build(getApplicationContext());
             startActivityForResult(intent, 1);
         }
@@ -56,8 +66,12 @@ public class MainActivity extends AppCompatActivity {
         idNumber.setText(idCard.getId());
         gender.setText(idCard.getGender().name());
         personalNumber.setText(idCard.getPersonalNumber());
-        dateOfBirth.setText(new Date(idCard.getDateOfBirth() * 1000).toString());
-        expirationDate.setText(new Date(idCard.getExpirationDate() * 1000).toString());
+        dateOfBirth.setText(dateFormat.format(new Date(idCard.getDateOfBirth() * 1000)));
+        expirationDate.setText(dateFormat.format(new Date(idCard.getExpirationDate() * 1000)));
+        address.setText(idCard.getAddress());
+        idCreationDate.setText(dateFormat.format(new Date(idCard.getIdCreatedDate() * 1000)));
+        placeOfBirth.setText(idCard.getPlaceOfBirth());
+        height.setText("" + idCard.getHeight());
     }
 
     private void setupViews() {
@@ -69,5 +83,9 @@ public class MainActivity extends AppCompatActivity {
         personalNumber = (TextView) findViewById(R.id.personalNumber);
         dateOfBirth = (TextView) findViewById(R.id.dateOfBirth);
         expirationDate = (TextView) findViewById(R.id.expirationDate);
+        address = (TextView) findViewById(R.id.address);
+        idCreationDate = (TextView) findViewById(R.id.idCreationDate);
+        placeOfBirth = (TextView) findViewById(R.id.placeOfBirth);
+        height = (TextView) findViewById(R.id.height);
     }
 }

@@ -19,10 +19,12 @@ ID card reader OCR for android
 
 ## Other options for the intent builder.
 
-        final Intent intent = OcrActivity.buildIntent()
-                .skipChooseStep(PassportType.BULGARIAN_ID_CARD_OLD) //Skip choose step but provide the type of passport.
-                .enableLogger(false)                                //Enable/disable the logging.
-                .build(getApplicationContext());
+    final Intent intent = OcrActivity.buildIntent()
+        .skipChooseStep(PassportType.BULGARIAN_ID_CARD_OLD) //Skip choose step but provide the type of passport.
+        .enableLogger(false)                                //Enable/disable the logging.
+        .showTempResults(true)                              //Show temp results before capturing.
+        .percentageToCapture(85)                            //When to take the text and continue.
+        .build(getApplicationContext());
 
 ## Depencies
 

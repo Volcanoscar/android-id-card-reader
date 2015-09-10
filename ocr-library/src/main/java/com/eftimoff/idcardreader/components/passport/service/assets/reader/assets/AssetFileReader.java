@@ -27,6 +27,9 @@ public class AssetFileReader implements FileReader {
         final Observable<String> stringObservable = Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(final Subscriber<? super String> subscriber) {
+                if (subscriber.isUnsubscribed()) {
+                    return;
+                }
                 if (fileName == null) {
                     subscriber.onError(new IllegalArgumentException("Filename must not be null."));
                     return;

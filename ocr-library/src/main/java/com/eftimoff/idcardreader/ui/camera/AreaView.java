@@ -14,6 +14,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.eftimoff.idcardreader.components.tesseract.models.TesseractResult;
 import com.eftimoff.idcardreader.models.IdArea;
 import com.eftimoff.idcardreader.models.IdAreaField;
 
@@ -25,6 +26,9 @@ public class AreaView extends View {
     private Paint textPaint;
     private int currentInnerPosition = -1;
     private AreaViewListener listener;
+    private boolean showTempResults;
+    private TesseractResult tempResult;
+    private int statusBarHeight;
 
     public AreaView(final Context context) {
         super(context);
@@ -48,6 +52,8 @@ public class AreaView extends View {
     }
 
     private void init() {
+        statusBarHeight = getStatusBarHeight();
+
         areaPaint = new Paint();
         areaPaint.setColor(Color.parseColor("#CC000000"));
         areaPaint.setAntiAlias(true);
@@ -69,6 +75,7 @@ public class AreaView extends View {
             public void onClick(final View v) {
                 final IdAreaField idAreaField = start();
                 notifyOnStart(idAreaField);
+                v.setEnabled(false);
             }
         });
     }
@@ -95,7 +102,6 @@ public class AreaView extends View {
     public IdAreaField start() {
         currentInnerPosition = 0;
         invalidate();
-        requestLayout();
         return getAreaRectForPosition(currentInnerPosition);
     }
 
@@ -113,7 +119,18 @@ public class AreaView extends View {
         drawArea(canvas);
         drawInnerAreas(canvas);
 
+        drawTempResult(canvas);
+
         canvas.restore();
+    }
+
+    private void drawTempResult(final Canvas canvas) {
+        if (showTempResults && tempResult != null) {
+            final String text = "Text : " + tempResult.getText();
+            canvas.drawText(text, getRight() - textPaint.measureText(text), getTop() + statusBarHeight, textPaint);
+            final String percentage = "Percentage : " + tempResult.getMeanConfidence();
+            canvas.drawText(percentage, getRight() - textPaint.measureText(percentage), getTop() + statusBarHeight + textPaint.getTextSize(), textPaint);
+        }
     }
 
 
@@ -169,7 +186,7 @@ public class AreaView extends View {
             }
             if (rectForInnerArea != null) {
                 canvas.drawRect(rectForInnerArea, innerPaint);
-                canvas.drawText(getResources().getString(idAreaField.getName()), rectForInnerArea.left, rectForInnerArea.top - 30, textPaint);
+                canvas.drawText(getResources().getString(idAreaField.getName()), rectForInnerArea.right + 10, rectForInnerArea.bottom, textPaint);
             }
         }
     }
@@ -213,11 +230,30 @@ public class AreaView extends View {
         }
     }
 
+    public void setShowTempResults(final boolean showTempResults) {
+        this.showTempResults = showTempResults;
+    }
+
+    public void tempResult(final TesseractResult tempResult) {
+        if (showTempResults) {
+            this.tempResult = tempResult;
+            invalidate();
+        }
+    }
+
+    private int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
     public interface AreaViewListener {
 
         void onStart(final IdAreaField idAreaField);
 
         void onFinish();
-
     }
 }

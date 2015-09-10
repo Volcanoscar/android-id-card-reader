@@ -1,66 +1,227 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center"
-              android:orientation="vertical"
-              tools:context=".MainActivity">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/firstName"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        tools:text="@string/hello_world"/>
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/middleName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        tools:text="@string/hello_world"/>
+        <TextView
+            android:id="@+id/firstNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="First Name"/>
 
-    <TextView
-        android:id="@+id/lastName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        tools:text="@string/hello_world"/>
+        <TextView
+            android:id="@+id/firstName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/firstNameText"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            tools:ignore="RtlHardcoded"
+            tools:text="@string/hello_world"/>
 
-    <TextView
-        android:id="@+id/idNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        tools:text="@string/hello_world"/>
+        <TextView
+            android:id="@+id/middleNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/firstNameText"
+            android:layout_marginBottom="10dp"
+            android:text="Middle Name"/>
 
-    <TextView
-        android:id="@+id/gender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        tools:text="@string/hello_world"/>
+        <TextView
+            android:id="@+id/middleName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/middleNameText"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            tools:ignore="RtlHardcoded"
+            tools:text="@string/hello_world"/>
 
-    <TextView
-        android:id="@+id/personalNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        tools:text="@string/hello_world"/>
+        <TextView
+            android:id="@+id/lastNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/middleNameText"
+            android:layout_marginBottom="10dp"
+            android:text="Last Name"/>
 
-    <TextView
-        android:id="@+id/dateOfBirth"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        tools:text="@string/hello_world"/>
+        <TextView
+            android:id="@+id/lastName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/lastNameText"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            tools:ignore="RtlHardcoded"
+            tools:text="@string/hello_world"/>
 
-    <TextView
-        android:id="@+id/expirationDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        tools:text="@string/hello_world"/>
+        <TextView
+            android:id="@+id/idNumberText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lastNameText"
+            android:layout_marginBottom="10dp"
+            android:text="Id Number"/>
 
+        <TextView
+            android:id="@+id/idNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/idNumberText"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            tools:ignore="RtlHardcoded"
+            tools:text="@string/hello_world"/>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/genderText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/idNumberText"
+            android:layout_marginBottom="10dp"
+            android:text="Gender"/>
+
+        <TextView
+            android:id="@+id/gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/genderText"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            tools:ignore="RtlHardcoded"
+            tools:text="@string/hello_world"/>
+
+        <TextView
+            android:id="@+id/personalNumberText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/genderText"
+            android:layout_marginBottom="10dp"
+            android:text="Personal Number"/>
+
+        <TextView
+            android:id="@+id/personalNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/personalNumberText"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            tools:ignore="RtlHardcoded"
+            tools:text="@string/hello_world"/>
+
+        <TextView
+            android:id="@+id/dateOfBirthText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/personalNumberText"
+            android:layout_marginBottom="10dp"
+            android:text="Date of birth"/>
+
+        <TextView
+            android:id="@+id/dateOfBirth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/dateOfBirthText"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            tools:ignore="RtlHardcoded"
+            tools:text="@string/hello_world"/>
+
+        <TextView
+            android:id="@+id/expirationDateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dateOfBirthText"
+            android:layout_marginBottom="10dp"
+            android:text="Expiration date"/>
+
+        <TextView
+            android:id="@+id/expirationDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/expirationDateText"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            tools:ignore="RtlHardcoded"
+            tools:text="@string/hello_world"/>
+
+        <TextView
+            android:id="@+id/addressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/expirationDateText"
+            android:layout_marginBottom="10dp"
+            android:text="Address"/>
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/addressText"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            tools:ignore="RtlHardcoded"
+            tools:text="@string/hello_world"/>
+
+        <TextView
+            android:id="@+id/idCreationDateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/addressText"
+            android:layout_marginBottom="10dp"
+            android:text="Id creation Date"/>
+
+        <TextView
+            android:id="@+id/idCreationDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/idCreationDateText"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            tools:ignore="RtlHardcoded"
+            tools:text="@string/hello_world"/>
+
+        <TextView
+            android:id="@+id/placeOfBirthText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/idCreationDateText"
+            android:layout_marginBottom="10dp"
+            android:text="Place of birth"/>
+
+        <TextView
+            android:id="@+id/placeOfBirth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/placeOfBirthText"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            tools:ignore="RtlHardcoded"
+            tools:text="@string/hello_world"/>
+
+        <TextView
+            android:id="@+id/heightText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/placeOfBirthText"
+            android:layout_marginBottom="10dp"
+            android:text="Height"/>
+
+        <TextView
+            android:id="@+id/height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/heightText"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            tools:ignore="RtlHardcoded"
+            tools:text="@string/hello_world"/>
+    </RelativeLayout>
+</ScrollView>

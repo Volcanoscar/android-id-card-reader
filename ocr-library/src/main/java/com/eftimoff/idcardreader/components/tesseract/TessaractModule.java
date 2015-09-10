@@ -2,6 +2,7 @@ package com.eftimoff.idcardreader.components.tesseract;
 
 import com.eftimoff.idcardreader.components.tesseract.images.TesseractBitmapConverter;
 import com.eftimoff.idcardreader.components.tesseract.images.planar.PlanarYUVTesseractBitmapConverter;
+import com.eftimoff.idcardreader.components.tesseract.images.yuv.YUVTesseractBitmapConverter;
 import com.eftimoff.idcardreader.components.tesseract.logger.TesseractLogger;
 import com.eftimoff.idcardreader.components.tesseract.logger.android.AndroidTesseractLogger;
 import com.eftimoff.idcardreader.components.tesseract.text.TesseractTextCleaner;
@@ -34,7 +35,7 @@ public class TessaractModule {
     @Provides
     @Singleton
     TesseractBitmapConverter provideTesseractBitmapConverter() {
-        return new PlanarYUVTesseractBitmapConverter();
+        return new YUVTesseractBitmapConverter();
     }
 
     @Provides

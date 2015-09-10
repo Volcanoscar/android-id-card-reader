@@ -34,6 +34,9 @@ public class FileUtils {
         return Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(final Subscriber<? super String> subscriber) {
+                if (subscriber.isUnsubscribed()) {
+                    return;
+                }
                 try {
                     final String downloadFileToSdCard = downloadFileToSdCardUtil(response.getBody().in(), fileName);
                     subscriber.onNext(downloadFileToSdCard);
@@ -50,6 +53,9 @@ public class FileUtils {
         return Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(final Subscriber<? super String> subscriber) {
+                if (subscriber.isUnsubscribed()) {
+                    return;
+                }
                 try {
                     final String downloadFileToSdCard = downloadFileToSdCardUtil(inputStream, fileName);
                     subscriber.onNext(downloadFileToSdCard);
@@ -95,6 +101,9 @@ public class FileUtils {
         return Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(final Subscriber<? super String> subscriber) {
+                if (subscriber.isUnsubscribed()) {
+                    return;
+                }
                 try {
                     final String filePath = unTarFileAndExtract(sdCardPath, desiredFileName);
                     final File file = new File(sdCardPath);

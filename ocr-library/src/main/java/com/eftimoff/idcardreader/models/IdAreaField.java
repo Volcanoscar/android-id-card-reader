@@ -118,7 +118,18 @@ public class IdAreaField implements Serializable {
     }
 
     public enum Field {
-        ID(R.string.field_id_card), FIRST_NAME(R.string.field_first_name), LAST_NAME(R.string.field_last_name), MIDDLE_NAME(R.string.field_middle_name), GENDER(R.string.field_gender), PERSONAL_NUMBER(R.string.field_personal_number), DATE_OF_BIRTH(R.string.field_date_of_birth), EXPIRATION_DATE(R.string.field_expiration_date);
+        ID(R.string.field_id_card),
+        FIRST_NAME(R.string.field_first_name),
+        LAST_NAME(R.string.field_last_name),
+        MIDDLE_NAME(R.string.field_middle_name),
+        GENDER(R.string.field_gender),
+        PERSONAL_NUMBER(R.string.field_personal_number),
+        DATE_OF_BIRTH(R.string.field_date_of_birth),
+        EXPIRATION_DATE(R.string.field_expiration_date),
+        ADDRESS(R.string.field_address),
+        ID_CARD_CREATED_DATE(R.string.field_id_card_created_date),
+        HEIGHT(R.string.field_height),
+        PLACE_OF_BIRTH(R.string.field_place_of_birth);
 
         private final int stringName;
 

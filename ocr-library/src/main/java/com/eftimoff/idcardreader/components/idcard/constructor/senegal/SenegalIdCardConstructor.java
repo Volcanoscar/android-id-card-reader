@@ -1,4 +1,4 @@
-package com.eftimoff.idcardreader.components.idcard.constructor.bulgaria;
+package com.eftimoff.idcardreader.components.idcard.constructor.senegal;
 
 import com.eftimoff.idcardreader.R;
 import com.eftimoff.idcardreader.components.idcard.constructor.EnumIdCardConstructor;
@@ -7,18 +7,18 @@ import com.eftimoff.idcardreader.models.IdCard;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class BulgarianIdCardConstructor extends EnumIdCardConstructor {
+public class SenegalIdCardConstructor extends EnumIdCardConstructor {
 
     private static final String DATE_FORMATTER = "ddMMyyyy";
     private final DateFormat dateFormat;
 
-    public BulgarianIdCardConstructor() {
+    public SenegalIdCardConstructor() {
         dateFormat = new SimpleDateFormat(DATE_FORMATTER);
     }
 
     @Override
     public int name() {
-        return R.string.constructor_bulgarian_old;
+        return R.string.constructor_senegal_id_card;
     }
 
     @Override
@@ -66,22 +66,22 @@ public class BulgarianIdCardConstructor extends EnumIdCardConstructor {
 
     @Override
     protected int parseHeight(final String text) {
-        return 0;
+        return (int) parseDateQuietly(text);
     }
 
     @Override
     protected long parseIdCreatedDate(final String text) {
-        return 0;
+        return parseDateQuietly(text);
     }
 
     @Override
     protected String parseAddress(final String text) {
-        return null;
+        return text;
     }
 
     @Override
     protected String parsePlaceOfBirth(final String text) {
-        return null;
+        return text;
     }
 
     private long parseDateQuietly(final String text) {

@@ -3,6 +3,7 @@ package com.eftimoff.idcardreader.ui.choose;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.IntRange;
 
 import com.eftimoff.idcardreader.R;
 import com.eftimoff.idcardreader.components.passport.DaggerPassportComponent;
@@ -25,6 +26,8 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
     private static final String EXTRA_SHOULD_SKIP_CHOOSE = "extra_should_skip_choose";
     private static final String EXTRA_SKIP_CHOOSE_TYPE = "extra_skip_choose_type";
     private static final String EXTRA_ENABLE_LOGGER = "extra_enable_logger";
+    private static final String EXTRA_SHOW_TEMP_RESULTS = "extra_show_temp_results";
+    private static final String EXTRA_PERCENTAGE_TO_CAPTURE = "extra_percentage_to_capture";
 
     public static final String EXTRA_ID_CARD = "idCard";
 
@@ -57,10 +60,11 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
         final ShowCameraSettings showCameraSettings = ShowCameraSettings.newShowCameraSettings().
                 passport(passport).
                 enableLogging(getIntent().getBooleanExtra(EXTRA_ENABLE_LOGGER, false)).
+                showTempResults(getIntent().getBooleanExtra(EXTRA_SHOW_TEMP_RESULTS, false)).
+                percentageToCapture(getIntent().getIntExtra(EXTRA_PERCENTAGE_TO_CAPTURE, 80)).
                 build();
 
         final ShowCameraFragment fragment = ShowCameraFragment.getInstance(showCameraSettings);
-
         startFragment(fragment);
     }
 
@@ -81,6 +85,8 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
 
         private PassportType passportType;
         private boolean enableLogger;
+        private boolean showTempResults;
+        private int percentageToCapture;
 
         public Builder skipChooseStep(final PassportType passportType) {
             this.passportType = passportType;
@@ -92,11 +98,23 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
             return this;
         }
 
+        public Builder showTempResults(final boolean showTempResults) {
+            this.showTempResults = showTempResults;
+            return this;
+        }
+
+        public Builder percentageToCapture(@IntRange(from = 0, to = 100) final int percentageToCapture) {
+            this.percentageToCapture = percentageToCapture;
+            return this;
+        }
+
         public Intent build(final Context context) {
             final Intent intent = new Intent(context, OcrActivity.class);
             intent.putExtra(EXTRA_SHOULD_SKIP_CHOOSE, passportType != null);
             intent.putExtra(EXTRA_SKIP_CHOOSE_TYPE, passportType);
             intent.putExtra(EXTRA_ENABLE_LOGGER, enableLogger);
+            intent.putExtra(EXTRA_SHOW_TEMP_RESULTS, showTempResults);
+            intent.putExtra(EXTRA_PERCENTAGE_TO_CAPTURE, percentageToCapture);
             return intent;
         }
     }

@@ -64,5 +64,85 @@
         }
       ]
     }
+  },
+  {
+    "type": "SENEGAL_ID_CARD",
+    "name": "Senegal",
+    "language": "eng",
+    "flagImage": "http://www.mapsofworld.com/images/world-countries-flags/senegalflag.gif",
+    "idArea": {
+      "rects": [
+        {
+          "field": "LAST_NAME",
+          "percentageFromParentLeft": 35,
+          "percentageFromParentTop": 26,
+          "percentageWidth": 11,
+          "percentageHeight": 4
+        },
+        {
+          "field": "FIRST_NAME",
+          "percentageFromParentLeft": 35,
+          "percentageFromParentTop": 35,
+          "percentageWidth": 9,
+          "percentageHeight": 4
+        },
+        {
+          "field": "DATE_OF_BIRTH",
+          "percentageFromParentLeft": 35,
+          "percentageFromParentTop": 44,
+          "percentageWidth": 13,
+          "percentageHeight": 5
+        },
+        {
+          "field": "GENDER",
+          "percentageFromParentLeft": 57,
+          "percentageFromParentTop": 44,
+          "percentageWidth": 4,
+          "percentageHeight": 5
+        },
+        {
+          "field": "HEIGHT",
+          "percentageFromParentLeft": 69,
+          "percentageFromParentTop": 44,
+          "percentageWidth": 7,
+          "percentageHeight": 5
+        },
+        {
+          "field": "PLACE_OF_BIRTH",
+          "percentageFromParentLeft": 35,
+          "percentageFromParentTop": 53,
+          "percentageWidth": 9,
+          "percentageHeight": 5
+        },
+        {
+          "field": "ID_CARD_CREATED_DATE",
+          "percentageFromParentLeft": 35,
+          "percentageFromParentTop": 63,
+          "percentageWidth": 13,
+          "percentageHeight": 5
+        },
+        {
+          "field": "EXPIRATION_DATE",
+          "percentageFromParentLeft": 57,
+          "percentageFromParentTop": 63,
+          "percentageWidth": 13,
+          "percentageHeight": 5
+        },
+        {
+          "field": "ADDRESS",
+          "percentageFromParentLeft": 35,
+          "percentageFromParentTop": 72,
+          "percentageWidth": 17,
+          "percentageHeight": 5
+        },
+        {
+          "field": "ID",
+          "percentageFromParentLeft": 60,
+          "percentageFromParentTop": 86,
+          "percentageWidth": 27,
+          "percentageHeight": 6
+        }
+      ]
+    }
   }
 ]

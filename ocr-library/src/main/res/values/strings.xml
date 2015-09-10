@@ -18,5 +18,10 @@
     <string name="field_personal_number">Personal number</string>
     <string name="field_date_of_birth">Date of birth</string>
     <string name="field_expiration_date">Expiration date</string>
+    <string name="field_address">Address</string>
+    <string name="field_id_card_created_date">Created date</string>
+    <string name="field_height">Height</string>
+    <string name="constructor_senegal_id_card">Senegal</string>
+    <string name="field_place_of_birth">Place of birth</string>
 
 </resources>

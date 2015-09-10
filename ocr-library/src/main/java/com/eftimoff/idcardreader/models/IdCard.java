@@ -12,6 +12,10 @@ public class IdCard implements Serializable {
     private String personalNumber;
     private long dateOfBirth;
     private long expirationDate;
+    private String address;
+    private long idCreatedDate;
+    private int height;
+    private String placeOfBirth;
 
     public String getId() {
         return id;
@@ -75,6 +79,38 @@ public class IdCard implements Serializable {
 
     public void setExpirationDate(final long expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(final String address) {
+        this.address = address;
+    }
+
+    public long getIdCreatedDate() {
+        return idCreatedDate;
+    }
+
+    public void setIdCreatedDate(final long idCreatedDate) {
+        this.idCreatedDate = idCreatedDate;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(final int height) {
+        this.height = height;
+    }
+
+    public String getPlaceOfBirth() {
+        return placeOfBirth;
+    }
+
+    public void setPlaceOfBirth(final String placeOfBirth) {
+        this.placeOfBirth = placeOfBirth;
     }
 
     public enum Gender {

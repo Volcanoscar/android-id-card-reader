@@ -3,11 +3,11 @@ package com.eftimoff.idcardreader.components.tesseract;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 
-import com.eftimoff.idcardreader.components.tesseract.models.TesseractResult;
 import com.eftimoff.idcardreader.components.tesseract.images.TesseractBitmapConverter;
-import com.eftimoff.idcardreader.components.tesseract.listeners.ProgressListener;
 import com.eftimoff.idcardreader.components.tesseract.listeners.GzipFileDownloadListener;
+import com.eftimoff.idcardreader.components.tesseract.listeners.ProgressListener;
 import com.eftimoff.idcardreader.components.tesseract.logger.TesseractLogger;
+import com.eftimoff.idcardreader.components.tesseract.models.TesseractResult;
 import com.eftimoff.idcardreader.components.tesseract.text.TesseractTextCleaner;
 import com.eftimoff.idcardreader.components.tesseract.traineddata.manager.TrainedDataManager;
 import com.google.common.base.Preconditions;
@@ -39,8 +39,7 @@ public class TesseractImpl implements Tesseract {
         tesseractLogger.log("Constructing Tesseract api.");
 
         tessBaseAPI = new TessBaseAPI();
-        tessBaseAPI.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SPARSE_TEXT);
-        tessBaseAPI.setVariable(TessBaseAPI.VAR_CHAR_BLACKLIST, "°");
+        tessBaseAPI.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SINGLE_LINE);
     }
 
     @Override
@@ -111,8 +110,9 @@ public class TesseractImpl implements Tesseract {
         return Observable.create(new Observable.OnSubscribe<TesseractResult>() {
             @Override
             public void call(final Subscriber<? super TesseractResult> subscriber) {
-
-                tesseractLogger.log("Tesseract.getFromBitmap() Getting text from bitmap ");
+                if (subscriber.isUnsubscribed()) {
+                    return;
+                }
                 try {
                     final Bitmap bitmap = tesseractBitmapConverter.convertToBitmap(array, width, height, rect);
 
