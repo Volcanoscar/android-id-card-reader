@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.support.annotation.IntRange;
 
 import com.eftimoff.idcardreader.R;
-import com.eftimoff.idcardreader.components.passport.DaggerPassportComponent;
+import com.eftimoff.idcardreader.components.passport.PassportComponent;
 import com.eftimoff.idcardreader.components.passport.PassportModule;
 import com.eftimoff.idcardreader.components.passport.service.PassportService;
 import com.eftimoff.idcardreader.models.IdCard;
@@ -46,7 +46,7 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
         final boolean shouldChooseSkipStep = getIntent().getBooleanExtra(EXTRA_SHOULD_SKIP_CHOOSE, false);
         if (shouldChooseSkipStep) {
             final PassportModule passportModule = new PassportModule(this);
-            final PassportService passportService = DaggerPassportComponent.builder().passportModule(passportModule).build().provideCountryService();
+            final PassportService passportService = new PassportComponent(new PassportModule(getApplicationContext())).providePassportService();
             final Observable<List<Passport>> passportsObservable = passportService.getPassports();
             passportsObservable.subscribe(observer);
             return;

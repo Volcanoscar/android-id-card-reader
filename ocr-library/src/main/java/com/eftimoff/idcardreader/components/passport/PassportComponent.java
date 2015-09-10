@@ -2,14 +2,17 @@ package com.eftimoff.idcardreader.components.passport;
 
 import com.eftimoff.idcardreader.components.passport.service.PassportService;
 
-import javax.inject.Singleton;
+public class PassportComponent {
 
-import dagger.Component;
+    private final PassportModule passportModule;
 
-@Singleton
-@Component(modules = {PassportModule.class})
-public interface PassportComponent {
+    public PassportComponent(final PassportModule passportModule) {
+        this.passportModule = passportModule;
+    }
 
-    PassportService provideCountryService();
+
+    public PassportService providePassportService() {
+        return passportModule.provideCountryService(passportModule.provideFileReader(), passportModule.provideAreaHelper(), passportModule.providePassportConverter());
+    }
 
 }

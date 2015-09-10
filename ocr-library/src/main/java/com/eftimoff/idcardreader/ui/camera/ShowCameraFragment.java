@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.eftimoff.idcardreader.R;
-import com.eftimoff.idcardreader.components.tesseract.DaggerTessaractComponent;
+import com.eftimoff.idcardreader.components.tesseract.TessaractComponent;
 import com.eftimoff.idcardreader.components.tesseract.TessaractModule;
 import com.eftimoff.idcardreader.components.tesseract.Tesseract;
 import com.eftimoff.idcardreader.components.tesseract.listeners.ProgressListener;
@@ -89,7 +89,7 @@ public class ShowCameraFragment extends BaseFragment {
     @Override
     protected void setupComponents() {
         final boolean enableLogging = cameraSettings.isEnableLogging();
-        tesseract = DaggerTessaractComponent.builder().tessaractModule(new TessaractModule(enableLogging)).build().provideTesseract();
+        tesseract = new TessaractComponent(new TessaractModule(enableLogging)).provideTesseract();
     }
 
     @Override

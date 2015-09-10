@@ -1,17 +1,26 @@
 package com.eftimoff.idcardreader.components.tesseract;
 
-import com.eftimoff.idcardreader.ui.common.BaseFragment;
+import com.eftimoff.idcardreader.components.tesseract.images.TesseractBitmapConverter;
+import com.eftimoff.idcardreader.components.tesseract.logger.TesseractLogger;
+import com.eftimoff.idcardreader.components.tesseract.text.TesseractTextCleaner;
+import com.eftimoff.idcardreader.components.tesseract.traineddata.downloader.TrainedDataDownloader;
+import com.eftimoff.idcardreader.components.tesseract.traineddata.manager.TrainedDataManager;
 
-import javax.inject.Singleton;
+public class TessaractComponent {
 
-import dagger.Component;
+    private final TessaractModule tessaractModule;
 
-@Singleton
-@Component(modules = {TessaractModule.class})
-public interface TessaractComponent {
+    public TessaractComponent(TessaractModule tessaractModule) {
+        this.tessaractModule = tessaractModule;
+    }
 
-    void inject(final BaseFragment baseFragment);
-
-    Tesseract provideTesseract();
+    public Tesseract provideTesseract() {
+        final TesseractBitmapConverter tesseractBitmapConverter = tessaractModule.provideTesseractBitmapConverter();
+        final TesseractLogger tesseractLogger = tessaractModule.provideTesseractLogger();
+        final TesseractTextCleaner tesseractTextCleaner = tessaractModule.provideTesseractTextCleaner();
+        final TrainedDataDownloader trainedDataDownloader = tessaractModule.provideTrainedDataDownloader();
+        final TrainedDataManager trainedDataManager = tessaractModule.provideTrainedDataManager(trainedDataDownloader);
+        return tessaractModule.provideTesseract(trainedDataManager, tesseractLogger, tesseractBitmapConverter, tesseractTextCleaner);
+    }
 
 }
