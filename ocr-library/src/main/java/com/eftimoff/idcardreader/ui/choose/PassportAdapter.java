@@ -22,7 +22,7 @@ public class PassportAdapter extends RecyclerView.Adapter<PassportAdapter.ViewHo
 
     @Override
     public PassportAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_country, parent, false);
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ocr_library_item_list_country, parent, false);
         return new ViewHolder(view);
     }
 

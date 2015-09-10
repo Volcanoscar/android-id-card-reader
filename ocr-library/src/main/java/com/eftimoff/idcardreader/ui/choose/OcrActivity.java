@@ -33,7 +33,7 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
 
     @Override
     protected int layoutResourceId() {
-        return R.layout.activity_choose;
+        return R.layout.ocr_library_activity_choose;
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -83,7 +84,7 @@ public class ShowCameraFragment extends BaseFragment {
 
     @Override
     protected int layoutResourceId() {
-        return R.layout.fragment_camera;
+        return R.layout.ocr_library_fragment_camera;
     }
 
     @Override
@@ -198,7 +199,7 @@ public class ShowCameraFragment extends BaseFragment {
 
         @Override
         public void onError(final Throwable throwable) {
-
+            Toast.makeText(getActivity(), "Error : " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
         }
     };
 

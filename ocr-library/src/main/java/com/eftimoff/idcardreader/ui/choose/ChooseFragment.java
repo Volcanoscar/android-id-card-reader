@@ -66,7 +66,7 @@ public class ChooseFragment extends BaseFragment {
 
     @Override
     protected int layoutResourceId() {
-        return R.layout.fragment_choose;
+        return R.layout.ocr_library_fragment_choose;
     }
 
     @Override

@@ -302,10 +302,11 @@ public class ShowCameraView extends FrameLayout implements SurfaceHolder.Callbac
             Log.d("DBG", "Error setting camera preview: " + e.getMessage());
         }
     }
-
+    @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
     }
 
+    @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         if (surfaceHolder.getSurface() == null) {
             return;
@@ -506,6 +507,7 @@ public class ShowCameraView extends FrameLayout implements SurfaceHolder.Callbac
         }).start();
     }
 
+    @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
         if (cameraIsLive.compareAndSet(false, true)) {
             if (camViewListener != null) {
