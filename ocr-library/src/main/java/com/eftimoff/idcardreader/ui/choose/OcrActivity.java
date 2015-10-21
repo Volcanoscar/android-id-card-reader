@@ -20,7 +20,6 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Observer;
-
 public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFragmentDelegate, ShowCameraFragment.ShowCameraFragmentDelegate {
 
     private static final String EXTRA_SHOULD_SKIP_CHOOSE = "extra_should_skip_choose";
@@ -28,6 +27,7 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
     private static final String EXTRA_ENABLE_LOGGER = "extra_enable_logger";
     private static final String EXTRA_SHOW_TEMP_RESULTS = "extra_show_temp_results";
     private static final String EXTRA_PERCENTAGE_TO_CAPTURE = "extra_percentage_to_capture";
+    private static final String EXTRA_SD_CARD_PATH = "extra_sd_card_path";
 
     public static final String EXTRA_ID_CARD = "idCard";
 
@@ -46,7 +46,7 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
         final boolean shouldChooseSkipStep = getIntent().getBooleanExtra(EXTRA_SHOULD_SKIP_CHOOSE, false);
         if (shouldChooseSkipStep) {
             final PassportModule passportModule = new PassportModule(this);
-            final PassportService passportService = new PassportComponent(new PassportModule(getApplicationContext())).providePassportService();
+            final PassportService passportService = new PassportComponent(passportModule).providePassportService();
             final Observable<List<Passport>> passportsObservable = passportService.getPassports();
             passportsObservable.subscribe(observer);
             return;
@@ -62,6 +62,7 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
                 enableLogging(getIntent().getBooleanExtra(EXTRA_ENABLE_LOGGER, false)).
                 showTempResults(getIntent().getBooleanExtra(EXTRA_SHOW_TEMP_RESULTS, false)).
                 percentageToCapture(getIntent().getIntExtra(EXTRA_PERCENTAGE_TO_CAPTURE, 80)).
+                sdCardPath(getIntent().getStringExtra(EXTRA_SD_CARD_PATH)).
                 build();
 
         final ShowCameraFragment fragment = ShowCameraFragment.getInstance(showCameraSettings);
@@ -87,6 +88,7 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
         private boolean enableLogger;
         private boolean showTempResults;
         private int percentageToCapture;
+        private String saveImageToSdCard;
 
         public Builder skipChooseStep(final PassportType passportType) {
             this.passportType = passportType;
@@ -108,6 +110,11 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
             return this;
         }
 
+        public Builder saveSaveIdCardToPath(final String sdCardPath) {
+            this.saveImageToSdCard = sdCardPath;
+            return this;
+        }
+
         public Intent build(final Context context) {
             final Intent intent = new Intent(context, OcrActivity.class);
             intent.putExtra(EXTRA_SHOULD_SKIP_CHOOSE, passportType != null);
@@ -115,6 +122,7 @@ public class OcrActivity extends BaseActivity implements ChooseFragment.ChooseFr
             intent.putExtra(EXTRA_ENABLE_LOGGER, enableLogger);
             intent.putExtra(EXTRA_SHOW_TEMP_RESULTS, showTempResults);
             intent.putExtra(EXTRA_PERCENTAGE_TO_CAPTURE, percentageToCapture);
+            intent.putExtra(EXTRA_SD_CARD_PATH, saveImageToSdCard);
             return intent;
         }
     }

@@ -10,12 +10,14 @@ public class ShowCameraSettings implements Serializable {
     private boolean enableLogging;
     private boolean showTempResults;
     private int percentageToCapture;
+    private String sdCardPath;
 
     private ShowCameraSettings(Builder builder) {
         this.passport = builder.passport;
         this.enableLogging = builder.enableLogging;
         this.showTempResults = builder.showTempResults;
         this.percentageToCapture = builder.percentageToCapture;
+        this.sdCardPath = builder.sdCardPath;
     }
 
     public static Builder newShowCameraSettings() {
@@ -38,11 +40,20 @@ public class ShowCameraSettings implements Serializable {
         return percentageToCapture;
     }
 
+    public String getSdCardPath() {
+        return sdCardPath;
+    }
+
+    public boolean shouldWriteToSdCard() {
+        return sdCardPath != null;
+    }
+
     public static final class Builder {
         private Passport passport;
         private boolean enableLogging;
         private boolean showTempResults;
         private int percentageToCapture;
+        private String sdCardPath;
 
         private Builder() {
         }
@@ -68,6 +79,11 @@ public class ShowCameraSettings implements Serializable {
 
         public Builder percentageToCapture(int percentageToCapture) {
             this.percentageToCapture = percentageToCapture;
+            return this;
+        }
+
+        public Builder sdCardPath(final String sdCardPath) {
+            this.sdCardPath = sdCardPath;
             return this;
         }
     }
