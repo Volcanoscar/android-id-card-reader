@@ -24,4 +24,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile project(':ocr-library')
+//    compile 'com.github.geftimov:android-id-card-reader:v0.0.6'
 }
